@@ -1,0 +1,23 @@
+{
+  "name": "krishiguide",
+  "version": "1.0.0",
+  "private": true,
+  "description": "KrishiGuide AI - Smart Farming Assistant with RAG Agricultural Knowledge",
+  "type": "module",
+  "scripts": {
+    "dev": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend install && npm --prefix frontend run build",
+    "preview": "npm --prefix frontend run preview"
+  },
+  "keywords": [
+    "krishiguide",
+    "smart-farming",
+    "agriculture",
+    "ai",
+    "rag",
+    "react",
+    "vite"
+  ],
+  "author": "chaithupatel07",
+  "license": "MIT"
+}
