@@ -1,0 +1,5 @@
+backend/
+*.py
+requirements.txt
+*.log
+uploads/
