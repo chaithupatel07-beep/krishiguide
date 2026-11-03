@@ -19,6 +19,13 @@ def get_embedding_model():
         if SentenceTransformer is None:
             raise RuntimeError("sentence-transformers is not installed.")
         logger.info(f"Loading SentenceTransformer model: {MODEL_NAME}...")
+        try:
+            import torch
+            torch.set_num_threads(1)
+            if hasattr(torch, "set_num_interop_threads"):
+                torch.set_num_interop_threads(1)
+        except Exception:
+            pass
         _model_instance = SentenceTransformer(MODEL_NAME)
         logger.info("SentenceTransformer model loaded successfully.")
     return _model_instance
