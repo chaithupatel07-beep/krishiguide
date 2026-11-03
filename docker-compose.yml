@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: krishiguide-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: krishiguide_db
+      MYSQL_USER: krishi_user
+      MYSQL_PASSWORD: krishi_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: krishiguide-qdrant
+    restart: always
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: krishiguide-backend
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=mysql+asyncmy://krishi_user:krishi_password@mysql:3306/krishiguide_db
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+      - JWT_SECRET_KEY=krishiguide_production_secret_key_change_in_env_2026
+      - ENVIRONMENT=production
+    depends_on:
+      - mysql
+      - qdrant
+
+volumes:
+  mysql_data:
+  qdrant_data:
