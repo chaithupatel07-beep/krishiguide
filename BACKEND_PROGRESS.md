@@ -4,7 +4,7 @@
 |---|---|---|---|
 | **Phase 0** | Existing Project Inspection & Architecture Assessment | **COMPLETED** | 2026-11-03 |
 | **Phase 1** | FastAPI Backend Setup and MySQL Connection | **COMPLETED** | 2026-11-03 |
-| **Phase 2** | Database Models and Alembic Migrations | **NOT STARTED** | - |
+| **Phase 2** | Database Models and Alembic Migrations | **COMPLETED** | 2026-11-03 |
 | **Phase 3** | Authentication and JWT | **NOT STARTED** | - |
 | **Phase 4** | Role-Based Access Control (RBAC) | **NOT STARTED** | - |
 | **Phase 5** | PDF Upload and Document Ingestion | **NOT STARTED** | - |
@@ -36,3 +36,25 @@
 - Created `.env.example` with required placeholders.
 - Verified endpoints `GET /api/health`, `GET /api/ready`, `GET /docs`, and `GET /openapi.json`.
 - Implemented and passed all 7 automated unit and integration tests with pytest (`backend/tests/test_phase1.py`).
+
+---
+
+## Phase 2 Summary
+- Implemented SQLAlchemy 2.x declarative models with typed `Mapped` annotations for all 12 tables:
+  1. `users` (id, full_name, email, phone_number, hashed_password, role, account_status, timestamps)
+  2. `farm_profiles` (user_id, farm_location, farm_size, soil_type, crop_details, irrigation_details, timestamps)
+  3. `documents` (document_name, file_path, file_type, file_size, uploaded_by, is_public, processing_status, processing_error, meta_info, timestamps)
+  4. `document_chunks` (document_id, chunk_index, chunk_text, page_number, meta_info, vector_reference, timestamps)
+  5. `conversations` (user_id, title, language, timestamps)
+  6. `chat_messages` (conversation_id, sender_role, content, language, is_reported, meta_info, timestamps)
+  7. `message_sources` (message_id, document_id, chunk_id, document_name, page_number, snippet, similarity_score, timestamps)
+  8. `farm_expenses` (user_id, category, amount, crop_name, description, expense_date, meta_info, timestamps)
+  9. `crop_tasks` (user_id, task_title, crop_name, description, scheduled_date, is_completed, reminder_info, timestamps)
+  10. `expert_cases` (farmer_id, expert_id, message_id, title, farmer_question, ai_response_snapshot, expert_response, status, recommendations, resolved_at, timestamps)
+  11. `feedback` (user_id, message_id, feedback_type, rating, comments, is_reviewed, timestamps)
+  12. `audit_logs` (user_id, action, resource_type, resource_id, details, ip_address, user_agent, timestamps)
+- Configured async Alembic environment in `backend/alembic/env.py` importing all models and dynamically reading `settings.async_database_url`.
+- Generated initial migration `2026_11_03_2200-683aacc9154f_initial_schema_all_12_tables.py` and executed `alembic upgrade head`.
+- Tested and verified migration rollback (`alembic downgrade base`) and re-application (`alembic upgrade head`).
+- Implemented comprehensive automated tests in `backend/tests/test_phase2.py` verifying table existence, foreign keys, indexes, decimal precision, JSON metadata, and cascading deletes.
+- All 10 automated tests in test suite pass.

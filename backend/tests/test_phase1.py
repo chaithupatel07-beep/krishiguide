@@ -88,3 +88,4 @@ async def test_direct_mysql_connection():
     assert result["connected"] is True
     assert result["database"] == "MySQL"
     assert "version" in result
+
