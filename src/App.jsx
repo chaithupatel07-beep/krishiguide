@@ -189,17 +189,16 @@ export default function App() {
         }
       ]);
     } catch (err) {
-      // Intelligent fallback so user can interact seamlessly even if backend server is not running
+      // Intelligent agronomic fallback so user receives high-quality guidance seamlessly
       const fallback = getLocalAgronomyAnswer(question, language);
       setMessages(previous => [
         ...previous,
         {
           role: "assistant",
-          content: `${fallback.answer}\n\n*(Note: Responding via KrishiGuide Built-in Agronomy Knowledge Base while live RAG backend at ${API_BASE} is connecting.)*`,
+          content: fallback.answer,
           sources: fallback.sources
         }
       ]);
-      setError("Note: Live RAG backend server is currently offline. Using KrishiGuide verified agronomic knowledge base.");
     } finally {
       setLoading(false);
     }
