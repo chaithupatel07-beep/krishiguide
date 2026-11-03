@@ -16,6 +16,7 @@ from app.database.connection import check_db_connection, close_db
 from app.api.auth import router as auth_router
 from app.api.rbac_test import router as rbac_router
 from app.api.documents import router as documents_router
+from app.api.chat import router as chat_router
 
 
 @asynccontextmanager
@@ -138,6 +139,7 @@ async def global_exception_handler(request: Request, exc: Exception):
 app.include_router(auth_router, prefix="/api")
 app.include_router(rbac_router, prefix="/api")
 app.include_router(documents_router, prefix="/api")
+app.include_router(chat_router)
 
 # Required Core Phase 1 Endpoints
 @app.get("/api/health", tags=["Health"])

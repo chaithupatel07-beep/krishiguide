@@ -14,6 +14,40 @@ oauth2_scheme = OAuth2PasswordBearer(
     description="Provide access token in 'Authorization: Bearer <token>' format",
 )
 
+oauth2_scheme_optional = OAuth2PasswordBearer(
+    tokenUrl="/api/auth/login",
+    scheme_name="JWT Bearer Optional",
+    auto_error=False,
+)
+
+
+async def get_optional_current_user(
+    token: Optional[str] = Depends(oauth2_scheme_optional),
+    db: AsyncSession = Depends(get_db),
+) -> Optional[User]:
+    """Returns the authenticated active user if token is provided, or None if anonymous."""
+    if not token:
+        return None
+
+    payload = decode_access_token(token)
+    if not payload:
+        return None
+
+    user_id_str: Optional[str] = payload.get("sub")
+    if not user_id_str:
+        return None
+
+    try:
+        user_id = int(user_id_str)
+    except (ValueError, TypeError):
+        return None
+
+    user = await db.get(User, user_id)
+    if not user or user.account_status != "active":
+        return None
+
+    return user
+
 
 async def get_current_user(
     token: str = Depends(oauth2_scheme),
