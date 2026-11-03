@@ -75,3 +75,4 @@ async def test_case_access(
         "accessed_by": current_user.id,
         "role": current_user.role,
     }
+
