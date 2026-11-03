@@ -85,3 +85,4 @@ def create_document_chunks(
             global_index += 1
 
     return all_chunks
+

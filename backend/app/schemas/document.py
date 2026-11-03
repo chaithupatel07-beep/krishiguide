@@ -35,3 +35,4 @@ class DocumentProcessResponse(BaseModel):
     processing_status: str
     message: str
     total_chunks: Optional[int] = None
+
