@@ -175,3 +175,4 @@ async def root():
         "health_url": "/api/health",
         "ready_url": "/api/ready",
     }
+
