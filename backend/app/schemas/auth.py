@@ -40,3 +40,4 @@ class ApiResponse(BaseModel):
     message: str
     data: Optional[Any] = None
     timestamp: datetime = Field(default_factory=datetime.utcnow)
+
