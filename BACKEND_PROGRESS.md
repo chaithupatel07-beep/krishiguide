@@ -11,7 +11,7 @@
 | **Phase 6** | RAG Pipeline and Gemini Integration | **COMPLETED** | 2026-11-03 |
 | **Phase 7** | AI Chat and Conversation History | **COMPLETED** | 2026-11-03 |
 | **Phase 8** | Farmer Tools and Farm Management | **COMPLETED** | 2026-11-03 |
-| **Phase 9** | Agricultural Expert and Admin APIs | **NOT STARTED** | - |
+| **Phase 9** | Agricultural Expert and Admin APIs | **COMPLETED** | 2026-11-03 |
 | **Phase 10** | Security, Performance and Final Testing | **NOT STARTED** | - |
 
 ---
@@ -152,3 +152,29 @@
 - Mounted `farm_router` in `app/main.py`.
 - Implemented automated pytest suite in `backend/tests/test_phase8.py` (5 tests).
 - All 45 automated tests across Phases 1-8 pass cleanly.
+
+---
+
+## Phase 9 Summary
+- Implemented data schemas in `app/schemas/admin_expert.py`:
+  - `AdminDashboardStats` (live aggregations across users, documents, chats, cases, and farm tools)
+  - `AdminUserItem`, `PaginatedUsersResponse`, `AdminUserUpdateRequest`
+  - `FeedbackCreate`, `FeedbackItemResponse`, `PaginatedFeedbackResponse`
+  - `AuditLogItemResponse`, `PaginatedAuditLogsResponse`
+  - `ExpertCaseItemResponse`, `PaginatedCasesResponse`, `ExpertCaseRespondRequest`, `ExpertCaseStatusUpdateRequest`
+- Implemented service layer in `app/services/admin_expert_service.py`:
+  - `AdminService.get_dashboard_stats`: real-time SQL aggregations for user role counts, document ingestion statuses, conversation metrics, reported answers, expert cases, and farm expenditure totals.
+  - `AdminService.list_users`: paginated user directory with case-insensitive search and role/status filtering.
+  - `AdminService.update_user`: role promotion/demotion and account suspension/activation with security protections preventing admin self-demotion or self-deactivation.
+  - `AdminService.create_feedback` and `list_feedback`: farmer feedback intake and admin review queue.
+  - `AdminService.list_audit_logs`: security and data modification audit trail.
+  - `ExpertService.list_cases`: specialist queue management (unassigned cases + assigned cases).
+  - `ExpertService.respond_to_case`: agronomic guidance recording, collision prevention, resolution tracking, and audit logging.
+  - `ExpertService.update_status`: lifecycle progression (pending, assigned, in_review, resolved, closed).
+- Implemented API endpoints in `app/api/admin.py` and `app/api/expert.py`:
+  - Admin endpoints: `GET /api/admin/dashboard`, `GET /api/admin/users`, `PATCH /api/admin/users/{user_id}`, `GET /api/admin/feedback`, `GET /api/admin/audit-logs`.
+  - Farmer/User feedback endpoint: `POST /api/feedback`.
+  - Expert endpoints: `GET /api/expert/cases`, `POST /api/expert/cases/{case_id}/respond`, `PATCH /api/expert/cases/{case_id}/status`.
+- Mounted `admin_router` and `expert_router` in `app/main.py`.
+- Implemented automated pytest suite in `backend/tests/test_phase9.py` (5 tests).
+- All 50 automated tests across Phases 1-9 pass cleanly.
