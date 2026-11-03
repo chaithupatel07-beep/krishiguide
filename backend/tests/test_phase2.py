@@ -255,3 +255,4 @@ async def test_migration_version():
         version = result.scalar_one_or_none()
         assert version is not None
         assert len(version) > 0
+

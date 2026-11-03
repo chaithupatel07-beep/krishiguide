@@ -18,3 +18,4 @@ class FarmProfile(Base, TimestampMixin):
 
     # Relationships
     user = relationship("User", back_populates="farm_profile")
+

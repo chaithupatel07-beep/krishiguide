@@ -4,9 +4,25 @@ import hashlib
 import hmac
 import base64
 import json
+import bcrypt
 from app.core.config import settings
 
-# Lightweight base64url JWT utilities compliant with standard HS256 without external dependencies
+
+def hash_password(password: str) -> str:
+    """Hashes a plaintext password using bcrypt with salt."""
+    salt = bcrypt.gensalt(rounds=12)
+    hashed = bcrypt.hashpw(password.encode("utf-8"), salt)
+    return hashed.decode("utf-8")
+
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """Verifies a plaintext password against a stored bcrypt hash."""
+    try:
+        return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password.encode("utf-8"))
+    except Exception:
+        return False
+
+
 def _base64url_encode(data: bytes) -> str:
     return base64.urlsafe_b64encode(data).decode("utf-8").rstrip("=")
 
@@ -16,17 +32,25 @@ def _base64url_decode(data: str) -> bytes:
     return base64.urlsafe_b64decode(data + padding)
 
 
-def create_access_token(subject: Union[str, Any], expires_delta: Optional[timedelta] = None, claims: Optional[Dict[str, Any]] = None) -> str:
+def create_access_token(
+    subject: Union[str, int],
+    role: str = "farmer",
+    expires_delta: Optional[timedelta] = None,
+    claims: Optional[Dict[str, Any]] = None,
+) -> str:
+    """Creates a signed HS256 JWT access token."""
+    now = datetime.now(timezone.utc)
     if expires_delta:
-        expire = datetime.now(timezone.utc) + expires_delta
+        expire = now + expires_delta
     else:
-        expire = datetime.now(timezone.utc) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        expire = now + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     
     header = {"alg": "HS256", "typ": "JWT"}
     payload: Dict[str, Any] = {
         "sub": str(subject),
+        "role": role,
         "exp": int(expire.timestamp()),
-        "iat": int(datetime.now(timezone.utc).timestamp()),
+        "iat": int(now.timestamp()),
     }
     if claims:
         payload.update(claims)
@@ -45,7 +69,8 @@ def create_access_token(subject: Union[str, Any], expires_delta: Optional[timede
     return f"{encoded_header}.{encoded_payload}.{encoded_signature}"
 
 
-def verify_access_token(token: str) -> Optional[Dict[str, Any]]:
+def decode_access_token(token: str) -> Optional[Dict[str, Any]]:
+    """Decodes and cryptographically verifies an HS256 JWT access token."""
     try:
         parts = token.split(".")
         if len(parts) != 3:
@@ -71,4 +96,3 @@ def verify_access_token(token: str) -> Optional[Dict[str, Any]]:
         return payload
     except Exception:
         return None
-

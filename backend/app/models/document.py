@@ -36,3 +36,4 @@ class DocumentChunk(Base, TimestampMixin):
 
     # Relationships
     document = relationship("Document", back_populates="chunks")
+

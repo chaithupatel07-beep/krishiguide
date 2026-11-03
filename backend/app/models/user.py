@@ -26,3 +26,4 @@ class User(Base, TimestampMixin):
     assigned_expert_cases = relationship("ExpertCase", foreign_keys="[ExpertCase.expert_id]", back_populates="expert")
     feedbacks = relationship("Feedback", back_populates="user", cascade="all, delete-orphan")
     audit_logs = relationship("AuditLog", back_populates="user")
+

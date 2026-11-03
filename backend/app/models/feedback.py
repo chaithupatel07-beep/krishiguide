@@ -18,3 +18,4 @@ class Feedback(Base, TimestampMixin):
     # Relationships
     user = relationship("User", back_populates="feedbacks")
     chat_message = relationship("ChatMessage")
+
