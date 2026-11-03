@@ -10,7 +10,7 @@
 | **Phase 5** | PDF Upload and Document Ingestion | **COMPLETED** | 2026-11-03 |
 | **Phase 6** | RAG Pipeline and Gemini Integration | **COMPLETED** | 2026-11-03 |
 | **Phase 7** | AI Chat and Conversation History | **COMPLETED** | 2026-11-03 |
-| **Phase 8** | Farmer Tools and Farm Management | **NOT STARTED** | - |
+| **Phase 8** | Farmer Tools and Farm Management | **COMPLETED** | 2026-11-03 |
 | **Phase 9** | Agricultural Expert and Admin APIs | **NOT STARTED** | - |
 | **Phase 10** | Security, Performance and Final Testing | **NOT STARTED** | - |
 
@@ -129,3 +129,26 @@
 - Mounted `chat_router` in `app/main.py`.
 - Implemented automated pytest suite in `backend/tests/test_phase7.py` (7 tests).
 - All 40 automated tests across Phases 1-7 pass cleanly.
+
+---
+
+## Phase 8 Summary
+- Implemented comprehensive schemas in `app/schemas/farm.py`:
+  - `FarmProfileCreateUpdate`, `FarmProfileResponse`
+  - `CostCalculationRequest`, `CostCalculationResponse`, `CostBreakdownItem` (with exact Decimal fields and validation)
+  - `FarmExpenseCreate`, `FarmExpenseResponse`, `PaginatedExpensesResponse`
+  - `CropTaskCreate`, `CropTaskUpdate`, `CropTaskResponse`
+- Implemented service layer in `app/services/farm_service.py`:
+  - Farm profile creation, retrieval, and updates with location, size, soil classification, active crops, and irrigation infrastructure.
+  - Cultivation cost calculator using exact `Decimal` arithmetic (`ROUND_HALF_UP`) preventing floating-point inaccuracies, computing per-acre costs, category breakdowns, projected yield, gross revenue, net profit, and profit margin percentages.
+  - Farm expense tracker with SQL-level aggregation (`func.sum`, `func.count`) and dynamic filtering by crop, expense category, and date ranges.
+  - Crop task scheduler and reminder manager with priority flags, execution date ordering, and completion status updates.
+  - Farmer ownership and strict isolation enforcement on all read, update, and delete actions.
+- Implemented API endpoints in `app/api/farm.py`:
+  - `GET /api/farm/profile` & `PUT /api/farm/profile`
+  - `POST /api/farm/calculate-cost`
+  - `GET /api/farm/expenses` & `POST /api/farm/expenses` & `DELETE /api/farm/expenses/{expense_id}`
+  - `GET /api/farm/tasks` & `POST /api/farm/tasks` & `PATCH /api/farm/tasks/{task_id}`
+- Mounted `farm_router` in `app/main.py`.
+- Implemented automated pytest suite in `backend/tests/test_phase8.py` (5 tests).
+- All 45 automated tests across Phases 1-8 pass cleanly.

@@ -17,6 +17,7 @@ from app.api.auth import router as auth_router
 from app.api.rbac_test import router as rbac_router
 from app.api.documents import router as documents_router
 from app.api.chat import router as chat_router
+from app.api.farm import router as farm_router
 
 
 @asynccontextmanager
@@ -140,6 +141,7 @@ app.include_router(auth_router, prefix="/api")
 app.include_router(rbac_router, prefix="/api")
 app.include_router(documents_router, prefix="/api")
 app.include_router(chat_router)
+app.include_router(farm_router)
 
 # Required Core Phase 1 Endpoints
 @app.get("/api/health", tags=["Health"])
