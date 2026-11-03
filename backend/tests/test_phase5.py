@@ -250,3 +250,4 @@ async def test_delete_document_and_vectors():
         # Verify 404 on subsequent get
         get_res = await ac.get(f"/api/documents/{doc_id}", headers=headers)
         assert get_res.status_code == 404
+

@@ -132,3 +132,4 @@ class VectorStoreService:
 
 # Singleton instance
 vector_store = VectorStoreService()
+

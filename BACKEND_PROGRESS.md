@@ -8,7 +8,7 @@
 | **Phase 3** | Authentication and JWT | **COMPLETED** | 2026-11-03 |
 | **Phase 4** | Role-Based Access Control (RBAC) | **COMPLETED** | 2026-11-03 |
 | **Phase 5** | PDF Upload and Document Ingestion | **COMPLETED** | 2026-11-03 |
-| **Phase 6** | RAG Pipeline and Gemini Integration | **NOT STARTED** | - |
+| **Phase 6** | RAG Pipeline and Gemini Integration | **COMPLETED** | 2026-11-03 |
 | **Phase 7** | AI Chat and Conversation History | **NOT STARTED** | - |
 | **Phase 8** | Farmer Tools and Farm Management | **NOT STARTED** | - |
 | **Phase 9** | Agricultural Expert and Admin APIs | **NOT STARTED** | - |
@@ -80,3 +80,27 @@
   - `POST /api/documents/{document_id}/process`: Manual retry/trigger of background ingestion.
 - Implemented automated pytest suite in `backend/tests/test_phase5.py` (5 tests).
 - All 28 tests across Phases 1-5 pass cleanly.
+
+---
+
+## Phase 6 Summary
+- Implemented modular vector search in `app/services/vector_search.py`:
+  - Enforces permission boundaries at query time (filters by public documents or documents owned by the querying farmer/admin/expert).
+  - Queries Qdrant collection with score threshold (0.25) and top-k ranking.
+  - Resolves matching vector references back to MySQL database chunks, document names, and 1-indexed page numbers.
+- Implemented Gemini API generation client in `app/services/gemini_service.py`:
+  - Utilizes Google Gemini SDK (`google-genai`) with fallback handling.
+  - Strict grounding prompt: instructs model to answer purely using agricultural context, never invent citations, pesticide instructions, or fertilizer dosages, and indicate when information is unavailable.
+  - Supports regional language localization (English, Telugu, Hindi, etc.).
+  - Factual context fallback generator when no live API key is provisioned.
+- Implemented end-to-end RAG pipeline orchestrator in `app/services/rag.py` (`RAGPipeline.query`):
+  - Question validation and query embedding.
+  - Permission-aware retrieval and chunk deduplication.
+  - Gemini grounded generation and real source reference assembly.
+- Implemented automated pytest suite in `backend/tests/test_phase6.py` (5 tests):
+  - Embedding vector dimensions and normalization.
+  - Permission-scoped retrieval.
+  - Grounded answer generation and real citation assertions.
+  - Insufficient context handling.
+  - Multilingual instruction support.
+- All 33 automated tests across Phases 1-6 pass cleanly.
