@@ -24,3 +24,4 @@ class ExpertCase(Base, TimestampMixin):
     farmer = relationship("User", foreign_keys=[farmer_id], back_populates="farmer_cases")
     expert = relationship("User", foreign_keys=[expert_id], back_populates="assigned_expert_cases")
     chat_message = relationship("ChatMessage")
+

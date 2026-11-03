@@ -48,3 +48,4 @@ class MessageSource(Base, TimestampMixin):
 
     # Relationships
     message = relationship("ChatMessage", back_populates="sources")
+

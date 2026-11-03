@@ -36,3 +36,4 @@ class CropTask(Base, TimestampMixin):
 
     # Relationships
     user = relationship("User", back_populates="tasks")
+

@@ -5,7 +5,7 @@
 | **Phase 0** | Existing Project Inspection & Architecture Assessment | **COMPLETED** | 2026-11-03 |
 | **Phase 1** | FastAPI Backend Setup and MySQL Connection | **COMPLETED** | 2026-11-03 |
 | **Phase 2** | Database Models and Alembic Migrations | **COMPLETED** | 2026-11-03 |
-| **Phase 3** | Authentication and JWT | **NOT STARTED** | - |
+| **Phase 3** | Authentication and JWT | **COMPLETED** | 2026-11-03 |
 | **Phase 4** | Role-Based Access Control (RBAC) | **NOT STARTED** | - |
 | **Phase 5** | PDF Upload and Document Ingestion | **NOT STARTED** | - |
 | **Phase 6** | RAG Pipeline and Gemini Integration | **NOT STARTED** | - |
@@ -40,21 +40,25 @@
 ---
 
 ## Phase 2 Summary
-- Implemented SQLAlchemy 2.x declarative models with typed `Mapped` annotations for all 12 tables:
-  1. `users` (id, full_name, email, phone_number, hashed_password, role, account_status, timestamps)
-  2. `farm_profiles` (user_id, farm_location, farm_size, soil_type, crop_details, irrigation_details, timestamps)
-  3. `documents` (document_name, file_path, file_type, file_size, uploaded_by, is_public, processing_status, processing_error, meta_info, timestamps)
-  4. `document_chunks` (document_id, chunk_index, chunk_text, page_number, meta_info, vector_reference, timestamps)
-  5. `conversations` (user_id, title, language, timestamps)
-  6. `chat_messages` (conversation_id, sender_role, content, language, is_reported, meta_info, timestamps)
-  7. `message_sources` (message_id, document_id, chunk_id, document_name, page_number, snippet, similarity_score, timestamps)
-  8. `farm_expenses` (user_id, category, amount, crop_name, description, expense_date, meta_info, timestamps)
-  9. `crop_tasks` (user_id, task_title, crop_name, description, scheduled_date, is_completed, reminder_info, timestamps)
-  10. `expert_cases` (farmer_id, expert_id, message_id, title, farmer_question, ai_response_snapshot, expert_response, status, recommendations, resolved_at, timestamps)
-  11. `feedback` (user_id, message_id, feedback_type, rating, comments, is_reviewed, timestamps)
-  12. `audit_logs` (user_id, action, resource_type, resource_id, details, ip_address, user_agent, timestamps)
+- Implemented SQLAlchemy 2.x declarative models with typed `Mapped` annotations for all 12 tables (`users`, `farm_profiles`, `documents`, `document_chunks`, `conversations`, `chat_messages`, `message_sources`, `farm_expenses`, `crop_tasks`, `expert_cases`, `feedback`, `audit_logs`).
 - Configured async Alembic environment in `backend/alembic/env.py` importing all models and dynamically reading `settings.async_database_url`.
 - Generated initial migration `2026_11_03_2200-683aacc9154f_initial_schema_all_12_tables.py` and executed `alembic upgrade head`.
 - Tested and verified migration rollback (`alembic downgrade base`) and re-application (`alembic upgrade head`).
 - Implemented comprehensive automated tests in `backend/tests/test_phase2.py` verifying table existence, foreign keys, indexes, decimal precision, JSON metadata, and cascading deletes.
-- All 10 automated tests in test suite pass.
+
+---
+
+## Phase 3 Summary
+- Implemented secure password hashing and verification using `bcrypt` (12 rounds with unique salt) in `app/core/security.py`.
+- Implemented cryptographically signed HS256 JWT access tokens with expiration in `app/core/security.py`.
+- Defined request and response Pydantic models in `app/schemas/auth.py` (`UserRegisterRequest`, `UserLoginRequest`, `UserResponse`, `TokenResponse`).
+- Implemented business logic in `app/services/auth_service.py`:
+  - `register_user`: Enforces default `farmer` role, blocks self-registration as `admin` or `expert` (HTTP 403), validates duplicate email addresses (HTTP 400), hashes passwords, and writes `USER_REGISTER` audit logs.
+  - `authenticate_user`: Verifies credentials, blocks inactive/suspended accounts (HTTP 403), issues signed JWTs, and writes `USER_LOGIN` audit logs.
+- Implemented `get_current_user` OAuth2 Bearer dependency in `app/api/deps.py`.
+- Exposed endpoints in `app/api/auth.py`:
+  - `POST /api/auth/register` (HTTP 201)
+  - `POST /api/auth/login` (HTTP 200)
+  - `GET /api/auth/me` (HTTP 200)
+- Implemented automated pytest suite in `backend/tests/test_phase3.py` (7 tests covering registration, duplicate rejection, role escalation rejection, login, profile retrieval, invalid token rejection, and suspended account blocking).
+- All 17 tests in the overall test suite pass cleanly.
