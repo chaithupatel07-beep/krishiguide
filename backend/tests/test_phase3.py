@@ -190,3 +190,4 @@ async def test_login_suspended_account_rejected():
         })
     assert login_res.status_code == 403
     assert "suspended" in login_res.json()["error"]["message"].lower()
+

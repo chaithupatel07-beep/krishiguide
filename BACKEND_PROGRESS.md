@@ -6,7 +6,7 @@
 | **Phase 1** | FastAPI Backend Setup and MySQL Connection | **COMPLETED** | 2026-11-03 |
 | **Phase 2** | Database Models and Alembic Migrations | **COMPLETED** | 2026-11-03 |
 | **Phase 3** | Authentication and JWT | **COMPLETED** | 2026-11-03 |
-| **Phase 4** | Role-Based Access Control (RBAC) | **NOT STARTED** | - |
+| **Phase 4** | Role-Based Access Control (RBAC) | **COMPLETED** | 2026-11-03 |
 | **Phase 5** | PDF Upload and Document Ingestion | **NOT STARTED** | - |
 | **Phase 6** | RAG Pipeline and Gemini Integration | **NOT STARTED** | - |
 | **Phase 7** | AI Chat and Conversation History | **NOT STARTED** | - |
@@ -51,14 +51,27 @@
 ## Phase 3 Summary
 - Implemented secure password hashing and verification using `bcrypt` (12 rounds with unique salt) in `app/core/security.py`.
 - Implemented cryptographically signed HS256 JWT access tokens with expiration in `app/core/security.py`.
-- Defined request and response Pydantic models in `app/schemas/auth.py` (`UserRegisterRequest`, `UserLoginRequest`, `UserResponse`, `TokenResponse`).
-- Implemented business logic in `app/services/auth_service.py`:
-  - `register_user`: Enforces default `farmer` role, blocks self-registration as `admin` or `expert` (HTTP 403), validates duplicate email addresses (HTTP 400), hashes passwords, and writes `USER_REGISTER` audit logs.
-  - `authenticate_user`: Verifies credentials, blocks inactive/suspended accounts (HTTP 403), issues signed JWTs, and writes `USER_LOGIN` audit logs.
+- Defined request and response Pydantic models in `app/schemas/auth.py`.
+- Implemented business logic in `app/services/auth_service.py` enforcing default `farmer` role and rejecting privilege escalation.
 - Implemented `get_current_user` OAuth2 Bearer dependency in `app/api/deps.py`.
-- Exposed endpoints in `app/api/auth.py`:
-  - `POST /api/auth/register` (HTTP 201)
-  - `POST /api/auth/login` (HTTP 200)
-  - `GET /api/auth/me` (HTTP 200)
-- Implemented automated pytest suite in `backend/tests/test_phase3.py` (7 tests covering registration, duplicate rejection, role escalation rejection, login, profile retrieval, invalid token rejection, and suspended account blocking).
-- All 17 tests in the overall test suite pass cleanly.
+- Exposed endpoints in `app/api/auth.py` (`POST /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/me`).
+- Implemented automated pytest suite in `backend/tests/test_phase3.py` (7 tests).
+
+---
+
+## Phase 4 Summary
+- Implemented reusable role dependencies in `app/api/deps.py`:
+  - `RoleChecker`: Enforces allowed role list (`admin`, `expert`, `farmer`), logs unauthorized attempts, and returns HTTP 403.
+  - `require_admin`: Strictly requires the `admin` role.
+  - `require_expert` / `require_expert_strict`: Role checkers for agricultural expert capabilities.
+  - `require_farmer` / `require_farmer_strict`: Role checkers for farmer-specific actions.
+- Implemented resource ownership and data isolation validation:
+  - `verify_ownership(resource_user_id, current_user, allow_admin=True)`: Ensures farmers access only their own records, preventing cross-farmer data leakage.
+  - `verify_expert_case_access(case_farmer_id, case_expert_id, current_user)`: Enforces expert case queue and assignment visibility boundaries.
+- Tested and verified authorization boundaries across all 3 roles:
+  - Unauthenticated access returns HTTP 401.
+  - Farmer accessing admin/expert endpoints returns HTTP 403.
+  - Expert accessing admin endpoints returns HTTP 403.
+  - Farmer accessing another farmer's data returns HTTP 403.
+  - Expert accessing another expert's assigned case returns HTTP 403.
+- All 23 tests across Phases 1-4 pass.
