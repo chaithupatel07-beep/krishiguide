@@ -7,7 +7,7 @@
 | **Phase 2** | Database Models and Alembic Migrations | **COMPLETED** | 2026-11-03 |
 | **Phase 3** | Authentication and JWT | **COMPLETED** | 2026-11-03 |
 | **Phase 4** | Role-Based Access Control (RBAC) | **COMPLETED** | 2026-11-03 |
-| **Phase 5** | PDF Upload and Document Ingestion | **NOT STARTED** | - |
+| **Phase 5** | PDF Upload and Document Ingestion | **COMPLETED** | 2026-11-03 |
 | **Phase 6** | RAG Pipeline and Gemini Integration | **NOT STARTED** | - |
 | **Phase 7** | AI Chat and Conversation History | **NOT STARTED** | - |
 | **Phase 8** | Farmer Tools and Farm Management | **NOT STARTED** | - |
@@ -60,18 +60,23 @@
 ---
 
 ## Phase 4 Summary
-- Implemented reusable role dependencies in `app/api/deps.py`:
-  - `RoleChecker`: Enforces allowed role list (`admin`, `expert`, `farmer`), logs unauthorized attempts, and returns HTTP 403.
-  - `require_admin`: Strictly requires the `admin` role.
-  - `require_expert` / `require_expert_strict`: Role checkers for agricultural expert capabilities.
-  - `require_farmer` / `require_farmer_strict`: Role checkers for farmer-specific actions.
-- Implemented resource ownership and data isolation validation:
-  - `verify_ownership(resource_user_id, current_user, allow_admin=True)`: Ensures farmers access only their own records, preventing cross-farmer data leakage.
-  - `verify_expert_case_access(case_farmer_id, case_expert_id, current_user)`: Enforces expert case queue and assignment visibility boundaries.
-- Tested and verified authorization boundaries across all 3 roles:
-  - Unauthenticated access returns HTTP 401.
-  - Farmer accessing admin/expert endpoints returns HTTP 403.
-  - Expert accessing admin endpoints returns HTTP 403.
-  - Farmer accessing another farmer's data returns HTTP 403.
-  - Expert accessing another expert's assigned case returns HTTP 403.
-- All 23 tests across Phases 1-4 pass.
+- Implemented reusable role dependencies in `app/api/deps.py` (`RoleChecker`, `require_admin`, `require_expert`, `require_farmer`).
+- Implemented resource ownership and data isolation validation (`verify_ownership`, `verify_expert_case_access`).
+- Tested and verified authorization boundaries across all 3 roles with 6 automated tests in `backend/tests/test_phase4.py`.
+
+---
+
+## Phase 5 Summary
+- Implemented PDF text extraction using PyMuPDF (`fitz` / `pymupdf`) in `app/services/pdf_extractor.py` preserving 1-indexed page numbers and cleaning whitespace.
+- Implemented overlapping text chunking in `app/services/chunking.py` with sliding window character limits and sentence boundaries.
+- Implemented 384-dimensional embedding generation using Sentence Transformers (`all-MiniLM-L6-v2`) in `app/services/embeddings.py`.
+- Implemented vector storage service using Qdrant in `app/services/vector_store.py` (`krishiguide_docs` collection with Cosine distance).
+- Built asynchronous non-blocking background ingestion worker in `app/workers/document_worker.py` (`ingest_document`) managing statuses: `pending`, `processing`, `completed`, `failed`.
+- Implemented document management endpoints in `app/api/documents.py`:
+  - `POST /api/documents/upload`: PDF validation, MIME checking, size enforcement (25 MB max), unique filename generation, path traversal prevention, background worker triggering.
+  - `GET /api/documents`: Role-filtered listing with chunk counts.
+  - `GET /api/documents/{document_id}`: Document detail with access control.
+  - `DELETE /api/documents/{document_id}`: Cleanup of disk file, MySQL record, chunks, and Qdrant vector points.
+  - `POST /api/documents/{document_id}/process`: Manual retry/trigger of background ingestion.
+- Implemented automated pytest suite in `backend/tests/test_phase5.py` (5 tests).
+- All 28 tests across Phases 1-5 pass cleanly.

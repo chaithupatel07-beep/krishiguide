@@ -5,6 +5,11 @@ from app.schemas.auth import (
     TokenResponse,
     ApiResponse,
 )
+from app.schemas.document import (
+    DocumentResponse,
+    DocumentChunkResponse,
+    DocumentProcessResponse,
+)
 
 __all__ = [
     "UserRegisterRequest",
@@ -12,4 +17,7 @@ __all__ = [
     "UserResponse",
     "TokenResponse",
     "ApiResponse",
+    "DocumentResponse",
+    "DocumentChunkResponse",
+    "DocumentProcessResponse",
 ]

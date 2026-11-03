@@ -169,3 +169,4 @@ async def test_expert_case_access_control():
             headers={"Authorization": f"Bearer {other_farmer_token}"},
         )
         assert res_other_farmer.status_code == 403
+
