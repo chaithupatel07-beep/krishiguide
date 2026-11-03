@@ -52,6 +52,21 @@ Whether deployed as a standalone frontend or paired with a Retrieval-Augmented G
 
 ```
 krishiguide/
+├── backend/                      # Production FastAPI + MySQL 8+ Backend
+│   ├── app/
+│   │   ├── api/                  # REST API Endpoints (Auth, Chat, Farm, Documents, Expert, Admin)
+│   │   ├── core/                 # Config (Pydantic Settings), Security (Bcrypt, JWT), Logging
+│   │   ├── database/             # Async MySQL Connection (asyncmy), Base, Pooling
+│   │   ├── models/               # SQLAlchemy 2.x Declarative Models (12 tables)
+│   │   ├── schemas/              # Pydantic V2 Request & Response Schemas
+│   │   ├── services/             # RAG, Vector Search, Gemini, Farm, Expert & Admin Services
+│   │   ├── workers/              # Async Background Ingestion Worker
+│   │   └── main.py               # FastAPI App, CORS, Exception Handlers, Lifespan
+│   ├── alembic/                  # Database Migrations (Initial schema, rollback/upgrade)
+│   ├── tests/                    # Comprehensive Pytest Suite (55 automated tests across all phases)
+│   ├── uploads/                  # Secure Document Storage Directory
+│   ├── requirements.txt          # Python Backend Dependencies
+│   └── .env.example              # Environment Configuration Template
 ├── frontend/                     # React + Vite Client Application
 │   ├── public/                   # Static assets & favicon
 │   ├── src/
@@ -62,11 +77,53 @@ krishiguide/
 │   ├── index.html                # HTML entry point with DM Sans & Manrope fonts
 │   ├── package.json              # Frontend dependencies (React, Axios, Lucide)
 │   └── vite.config.js            # Vite configuration with dev proxy
-├── .gitignore                    # Git ignore rules for node_modules and build artifacts
+├── BACKEND_DOCS.md               # Detailed Backend API, Architecture & Schema Documentation
+├── BACKEND_PROGRESS.md           # Phase 0-10 Completion Tracker (All 10 Phases Completed)
+├── PROJECT_INSPECTION_REPORT.md  # Initial Phase 0 Project Inspection Report
+├── .gitignore                    # Git ignore rules for node_modules, storage, and build artifacts
 ├── netlify.toml                  # Netlify 1-click deployment configuration
 ├── package.json                  # Root runner script delegating to frontend
 ├── vercel.json                   # Vercel 1-click deployment configuration
-└── README.md                     # Documentation & setup guide
+└── README.md                     # Project documentation & setup guide
+```
+
+---
+
+## ⚡ Backend Quickstart (FastAPI + MySQL 8+ + Qdrant)
+
+See [`BACKEND_DOCS.md`](./BACKEND_DOCS.md) for full architectural details and complete API specifications.
+
+### 1. Install Dependencies
+```bash
+cd backend
+pip install -r requirements.txt
+```
+
+### 2. Configure Environment
+```bash
+copy .env.example .env
+# Edit .env with your MySQL, Gemini API, and Qdrant credentials
+```
+
+### 3. Run Database Migrations
+```bash
+py -3.13 -m alembic upgrade head
+```
+
+### 4. Start the Backend Server
+```bash
+py -3.13 -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+```
+
+- **Interactive API Documentation:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+- **API Health Check:** [http://127.0.0.1:8000/api/health](http://127.0.0.1:8000/api/health)
+- **Database Readiness:** [http://127.0.0.1:8000/api/ready](http://127.0.0.1:8000/api/ready)
+
+### 5. Run Automated Tests
+```bash
+cd backend
+py -3.13 -m pytest tests/ -v
+# 55 passed in 28.5s (0 errors)
 ```
 
 ---
