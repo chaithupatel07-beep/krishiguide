@@ -7,9 +7,9 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: krishiguide_db
-      MYSQL_USER: krishi_user
-      MYSQL_PASSWORD: krishi_password
+      MYSQL_DATABASE: smart_farming_db
+      MYSQL_USER: smart_farming_user
+      MYSQL_PASSWORD: smart_farming_password
     ports:
       - "3306:3306"
     volumes:
@@ -34,7 +34,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=mysql+asyncmy://krishi_user:krishi_password@mysql:3306/krishiguide_db
+      - DATABASE_URL=mysql+asyncmy://smart_farming_user:smart_farming_password@mysql:3306/smart_farming_db
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
       - JWT_SECRET_KEY=smart_farming_production_secret_key_change_in_env_2026

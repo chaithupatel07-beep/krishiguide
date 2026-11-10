@@ -32,7 +32,7 @@
 - Configured SQLAlchemy 2.x asynchronous engine with connection pooling and `asyncmy` MySQL driver in `app/database/connection.py`.
 - Created declarative `Base` and `TimestampMixin` in `app/database/base.py`.
 - Implemented FastAPI application with CORS middleware, centralized exception handling, and request timing middleware in `app/main.py`.
-- Initialized and started MySQL 8.4 Server daemon on port 3306 and created database `krishiguide_db`.
+- Initialized and started MySQL 8.4 Server daemon on port 3306 and created database `smart_farming_db`.
 - Created `.env.example` with required placeholders.
 - Verified endpoints `GET /api/health`, `GET /api/ready`, `GET /docs`, and `GET /openapi.json`.
 - Implemented and passed all 7 automated unit and integration tests with pytest (`backend/tests/test_phase1.py`).
@@ -70,7 +70,7 @@
 - Implemented PDF text extraction using PyMuPDF (`fitz` / `pymupdf`) in `app/services/pdf_extractor.py` preserving 1-indexed page numbers and cleaning whitespace.
 - Implemented overlapping text chunking in `app/services/chunking.py` with sliding window character limits and sentence boundaries.
 - Implemented 384-dimensional embedding generation using Sentence Transformers (`all-MiniLM-L6-v2`) in `app/services/embeddings.py`.
-- Implemented vector storage service using Qdrant in `app/services/vector_store.py` (`krishiguide_docs` collection with Cosine distance).
+- Implemented vector storage service using Qdrant in `app/services/vector_store.py` (`smart_farming_docs` collection with Cosine distance).
 - Built asynchronous non-blocking background ingestion worker in `app/workers/document_worker.py` (`ingest_document`) managing statuses: `pending`, `processing`, `completed`, `failed`.
 - Implemented document management endpoints in `app/api/documents.py`:
   - `POST /api/documents/upload`: PDF validation, MIME checking, size enforcement (25 MB max), unique filename generation, path traversal prevention, background worker triggering.
