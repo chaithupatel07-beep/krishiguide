@@ -138,8 +138,8 @@ py -3.13 -m pytest tests/ -v
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/chaithupatel07-beep/krishiguide.git
-   cd krishiguide
+   git clone https://github.com/chaithupatel07-beep/ai-smart-farming-assistant.git
+   cd ai-smart-farming-assistant
    ```
 
 2. **Install frontend dependencies:**
@@ -167,13 +167,13 @@ py -3.13 -m pytest tests/ -v
 ### Deploying to Vercel
 1. Push your repository to GitHub (`main` branch).
 2. Go to [Vercel](https://vercel.com) and click **"Add New Project"**.
-3. Import `chaithupatel07-beep/krishiguide`.
+3. Import `chaithupatel07-beep/ai-smart-farming-assistant`.
 4. The included [`vercel.json`](./vercel.json) automatically sets the build command and output directory (`dist`).
 5. Click **Deploy**!
 
 ### Deploying to Netlify
 1. Go to [Netlify](https://app.netlify.com) and click **"Add new site" -> "Import an existing project"**.
-2. Select `chaithupatel07-beep/krishiguide`.
+2. Select `chaithupatel07-beep/ai-smart-farming-assistant`.
 3. The included [`netlify.toml`](./netlify.toml) automatically sets base directory to `frontend` and publish directory to `dist`.
 4. Click **Deploy Site**!
 

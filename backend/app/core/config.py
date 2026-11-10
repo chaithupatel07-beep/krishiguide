@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     MYSQL_PORT: int = 3306
     MYSQL_USER: str = "root"
     MYSQL_PASSWORD: str = ""
-    MYSQL_DATABASE: str = "krishiguide_db"
+    MYSQL_DATABASE: str = "smart_farming_db"
     DATABASE_URL: str = ""
 
     # Connection Pool Settings
@@ -30,7 +30,7 @@ class Settings(BaseSettings):
 
     # Security & JWT
     JWT_SECRET_KEY: str = Field(
-        default="krishiguide-super-secret-jwt-key-2026-minimum-32-chars",
+        default="smart-farming-assistant-super-secret-jwt-key-2026-minimum-32-chars",
         description="Secret key for signing JWT tokens",
     )
     JWT_ALGORITHM: str = "HS256"
@@ -40,7 +40,7 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str = ""
     QDRANT_URL: str = "http://127.0.0.1:6333"
     QDRANT_API_KEY: str = ""
-    QDRANT_COLLECTION: str = "krishiguide_docs"
+    QDRANT_COLLECTION: str = "smart_farming_docs"
 
     # CORS & Networking
     CORS_ORIGINS: Union[str, List[str]] = [

@@ -89,8 +89,8 @@ MYSQL_HOST=127.0.0.1
 MYSQL_PORT=3306
 MYSQL_USER=root
 MYSQL_PASSWORD=your_mysql_password
-MYSQL_DATABASE=krishiguide_db
-DATABASE_URL=mysql+asyncmy://root:your_mysql_password@127.0.0.1:3306/krishiguide_db
+MYSQL_DATABASE=smart_farming_db
+DATABASE_URL=mysql+asyncmy://root:your_mysql_password@127.0.0.1:3306/smart_farming_db
 
 # Security & Authentication
 JWT_SECRET_KEY=your_secure_random_hs256_jwt_secret_key_here
@@ -101,7 +101,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES=1440
 GEMINI_API_KEY=your_google_gemini_api_key_here
 QDRANT_URL=http://127.0.0.1:6333
 QDRANT_API_KEY=
-QDRANT_COLLECTION_NAME=krishiguide_docs
+QDRANT_COLLECTION_NAME=smart_farming_docs
 EMBEDDING_MODEL_NAME=all-MiniLM-L6-v2
 
 # Storage

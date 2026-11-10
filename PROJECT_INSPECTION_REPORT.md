@@ -2,14 +2,14 @@
 
 ## 1. Executive Summary & Repository Inspection
 
-- **Repository**: `https://github.com/chaithupatel07-beep/krishiguide.git`
-- **Location**: `C:\Users\chait\.antigravity-ide\krishiguide`
+- **Repository**: `https://github.com/chaithupatel07-beep/ai-smart-farming-assistant.git`
+- **Location**: `C:\Users\chait\.antigravity-ide\ai-smart-farming-assistant`
 - **Git Branch**: `main`
 - **Current Commit**: `095ea75` ("fix(vercel): make deployment universal for both root and frontend root directory settings")
 
 ### Directory Structure
 ```
-krishiguide/
+ai-smart-farming-assistant/
 ├── frontend/                     # Nested duplicate of client for multi-platform deployment
 │   ├── src/
 │   │   ├── App.jsx
@@ -45,7 +45,7 @@ krishiguide/
 - **Existing Backend in Repository**:
   - **None**. There was no Python or FastAPI backend code in the repository.
 - **Other Local Workspaces**:
-  - `agrisynapse` exists on the machine as a separate Node.js/Express mock engine; it is not part of KrishiGuide.
+  - `agrisynapse` exists on the machine as a separate Node.js/Express mock engine; it is not part of AI Smart Farming Assistant.
 
 ---
 
@@ -68,14 +68,14 @@ krishiguide/
 ## 4. Existing Database Configuration & Inspection
 
 - **PostgreSQL / SQLite Status**:
-  - The local Windows host has a background service `postgresql-x64-18` on port 5432, but it has no database models or migrations connected to `krishiguide`.
-  - SQLite is not configured in `krishiguide`.
+  - The local Windows host has a background service `postgresql-x64-18` on port 5432, but it has no database models or migrations connected to `ai-smart-farming-assistant`.
+  - SQLite is not configured in `ai-smart-farming-assistant`.
 - **MySQL Migration Plan**:
   - In accordance with Mandatory Rule 11 ("Do not use PostgreSQL, pgvector, or PostgreSQL-specific libraries or SQL") and Rule 12 ("Use MySQL 8+, FastAPI, SQLAlchemy 2.x asynchronous sessions, Alembic, and Pydantic"):
-  - Database name: `krishiguide_db`.
+  - Database name: `smart_farming_db`.
   - Driver: Asynchronous MySQL driver `asyncmy`.
-  - Dialect: `mysql+asyncmy://<user>:<password>@<host>:3306/krishiguide_db`.
-  - No legacy KrishiGuide database records exist in PostgreSQL to transfer; a clean schema will be initialized via Alembic on MySQL 8+.
+  - Dialect: `mysql+asyncmy://<user>:<password>@<host>:3306/smart_farming_db`.
+  - No legacy database records exist in PostgreSQL to transfer; a clean schema will be initialized via Alembic on MySQL 8+.
 
 ---
 
@@ -111,7 +111,7 @@ krishiguide/
   - Default public registration: `farmer`.
 - **AI Integrations**:
   - Embeddings: `sentence-transformers` (`all-MiniLM-L6-v2`).
-  - Vector DB: `Qdrant` (collection: `krishiguide_docs`).
+  - Vector DB: `Qdrant` (collection: `smart_farming_docs`).
   - LLM: Google Gemini API (`google-genai` SDK / modern REST).
   - Document parser: `PyMuPDF` (`fitz`).
 
