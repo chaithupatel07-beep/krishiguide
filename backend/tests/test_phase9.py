@@ -19,7 +19,7 @@ def anyio_backend():
 async def test_admin_dashboard_real_aggregations():
     """Verify GET /api/admin/dashboard returns accurate real SQL aggregated metrics."""
     ts = int(datetime.now().timestamp() * 1000)
-    admin_email = f"admin_dash_{ts}@krishiguide.org"
+    admin_email = f"admin_dash_{ts}@smartfarming.org"
 
     async with AsyncSessionLocal() as session:
         admin = User(
@@ -55,8 +55,8 @@ async def test_admin_dashboard_real_aggregations():
 async def test_admin_user_management():
     """Verify admin listing users, promoting roles, deactivating, and preventing self-demotion."""
     ts = int(datetime.now().timestamp() * 1000)
-    admin_email = f"admin_mgr_{ts}@krishiguide.org"
-    farmer_email = f"farmer_mgr_{ts}@krishiguide.org"
+    admin_email = f"admin_mgr_{ts}@smartfarming.org"
+    farmer_email = f"farmer_mgr_{ts}@smartfarming.org"
 
     async with AsyncSessionLocal() as session:
         admin = User(full_name="Admin Mgr", email=admin_email, hashed_password=hash_password("Pass123!"), role="admin", account_status="active")
@@ -116,8 +116,8 @@ async def test_admin_user_management():
 async def test_expert_case_workflow():
     """Verify expert listing cases, responding with verified agronomic guidance, and resolving."""
     ts = int(datetime.now().timestamp() * 1000)
-    expert_email = f"expert_{ts}@krishiguide.org"
-    farmer_email = f"farmer_case_{ts}@krishiguide.org"
+    expert_email = f"expert_{ts}@smartfarming.org"
+    farmer_email = f"farmer_case_{ts}@smartfarming.org"
 
     async with AsyncSessionLocal() as session:
         expert = User(full_name="Dr. Agricultural Expert", email=expert_email, hashed_password=hash_password("Pass123!"), role="expert", account_status="active")
@@ -181,8 +181,8 @@ async def test_expert_case_workflow():
 async def test_feedback_and_audit_logs():
     """Verify farmer feedback submission and admin audit log retrieval."""
     ts = int(datetime.now().timestamp() * 1000)
-    farmer_email = f"farmer_fb_{ts}@krishiguide.org"
-    admin_email = f"admin_fb_{ts}@krishiguide.org"
+    farmer_email = f"farmer_fb_{ts}@smartfarming.org"
+    admin_email = f"admin_fb_{ts}@smartfarming.org"
 
     async with AsyncSessionLocal() as session:
         farmer = User(full_name="Farmer Feedback Test", email=farmer_email, hashed_password=hash_password("Pass123!"), role="farmer", account_status="active")
@@ -225,8 +225,8 @@ async def test_feedback_and_audit_logs():
 async def test_role_enforcement_on_admin_and_expert():
     """Verify farmers and experts cannot access unauthorized admin or expert endpoints."""
     ts = int(datetime.now().timestamp() * 1000)
-    farmer_email = f"f_unauth_{ts}@krishiguide.org"
-    expert_email = f"e_unauth_{ts}@krishiguide.org"
+    farmer_email = f"f_unauth_{ts}@smartfarming.org"
+    expert_email = f"e_unauth_{ts}@smartfarming.org"
 
     async with AsyncSessionLocal() as session:
         f = User(full_name="Unauthorized Farmer", email=farmer_email, hashed_password=hash_password("Pass123!"), role="farmer", account_status="active")

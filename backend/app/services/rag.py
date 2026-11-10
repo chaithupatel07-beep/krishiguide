@@ -8,15 +8,15 @@ from app.core.logging import logger
 
 INSUFFICIENT_CONTEXT_MESSAGES = {
     "English": (
-        "I could not find verified agricultural guidelines in the KrishiGuide knowledge repository to answer your specific question accurately. "
+        "I could not find verified agricultural guidelines in the AI Smart Farming Assistant knowledge repository to answer your specific question accurately. "
         "To avoid crop damage or incorrect chemical application, please consult your local Krishi Vigyan Kendra (KVK) or an agricultural university specialist."
     ),
     "Telugu": (
-        "మీ ప్రశ్నకు సమాధానం ఇవ్వడానికి కృషిగైడ్ పత్రాలలో సరిపడా ప్రామాణిక సమాచారం లభించలేదు. "
+        "మీ ప్రశ్నకు సమాధానం ఇవ్వడానికి ఏఐ స్మార్ట్ ఫార్మింగ్ అసిస్టెంట్ పత్రాలలో సరిపడా ప్రామాణిక సమాచారం లభించలేదు. "
         "పంట రక్షణ మరియు సరైన సలహాల కోసం దయచేసి సమీపంలోని కృషి విజ్ఞాన కేంద్రం (KVK) లేదా స్థానిక వ్యవసాయ అధికారిని సంప్రదించండి."
     ),
     "Hindi": (
-        "आपके प्रश्न का सटीक उत्तर देने के लिए कृषिगाइड रिपोजिटरी में पर्याप्त प्रमाणित दिशा-निर्देश उपलब्ध नहीं हैं। "
+        "आपके प्रश्न का सटीक उत्तर देने के लिए एआई स्मार्ट फार्मिंग असिस्टेंट रिपोजिटरी में पर्याप्त प्रमाणित दिशा-निर्देश उपलब्ध नहीं हैं। "
         "फसल सुरक्षा और सही सलाह के लिए कृपया अपने नजदीकी कृषि विज्ञान केंद्र (KVK) या कृषि विशेषज्ञ से संपर्क करें।"
     ),
 }

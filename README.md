@@ -1,4 +1,4 @@
-# 🌾 KrishiGuide AI — Smart Farming Assistant
+# 🌾 AI Smart Farming Assistant
 
 [![React](https://img.shields.io/badge/React-18.3+-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-6.0+-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
@@ -13,9 +13,9 @@
 
 ## 🌟 Overview
 
-**KrishiGuide AI** is a modern, responsive web application designed for farmers, agricultural extension workers, and agronomy researchers. It bridges the gap between scientific agricultural research (ICAR, agricultural universities, and Ministry of Agriculture guidelines) and ground-level farming decisions.
+**AI Smart Farming Assistant** is a modern, responsive web application designed for farmers, agricultural extension workers, and agronomy researchers. It bridges the gap between scientific agricultural research (ICAR, agricultural universities, and Ministry of Agriculture guidelines) and ground-level farming decisions.
 
-Whether deployed as a standalone frontend or paired with a Retrieval-Augmented Generation (RAG) backend, KrishiGuide provides clear, actionable advice across crop lifecycles.
+Whether deployed as a standalone frontend or paired with a Retrieval-Augmented Generation (RAG) backend, AI Smart Farming Assistant provides clear, actionable advice across crop lifecycles.
 
 ---
 
@@ -44,14 +44,14 @@ Whether deployed as a standalone frontend or paired with a Retrieval-Augmented G
 
 ### 5. 📚 Knowledge Library & RAG Integration
 - Curated repository structure for Packages of Practice, crop protection, and government schemes (PM-KISAN, PMKSY, PMFBY).
-- Designed for seamless connection with semantic search engines, vector databases (pgvector/FAISS), and LLMs.
+- Designed for seamless connection with semantic search engines, vector databases (Qdrant), and LLMs.
 
 ---
 
 ## 📁 Repository Structure
 
 ```
-krishiguide/
+ai-smart-farming-assistant/
 ├── backend/                      # Production FastAPI + MySQL 8+ Backend
 │   ├── app/
 │   │   ├── api/                  # REST API Endpoints (Auth, Chat, Farm, Documents, Expert, Admin)
@@ -70,7 +70,7 @@ krishiguide/
 ├── frontend/                     # React + Vite Client Application
 │   ├── public/                   # Static assets & favicon
 │   ├── src/
-│   │   ├── App.jsx               # Main KrishiGuide dashboard & modules
+│   │   ├── App.jsx               # Main AI Smart Farming Assistant dashboard & modules
 │   │   ├── index.css             # Harmonious styling & design system
 │   │   └── main.jsx              # Application bootstrap
 │   ├── .env.example              # Configurable backend API environment variables
@@ -168,7 +168,7 @@ py -3.13 -m pytest tests/ -v
 1. Push your repository to GitHub (`main` branch).
 2. Go to [Vercel](https://vercel.com) and click **"Add New Project"**.
 3. Import `chaithupatel07-beep/krishiguide`.
-4. The included [`vercel.json`](./vercel.json) automatically sets the build command (`npm --prefix frontend run build`) and output directory (`frontend/dist`).
+4. The included [`vercel.json`](./vercel.json) automatically sets the build command and output directory (`dist`).
 5. Click **Deploy**!
 
 ### Deploying to Netlify

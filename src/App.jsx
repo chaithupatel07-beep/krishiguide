@@ -124,8 +124,8 @@ function getLocalAgronomyAnswer(question, lang = "English") {
   }
 
   return {
-    answer: `Here is practical agronomic guidance for "${question}":\n\n1. Soil & Climate Assessment: Verify that your soil texture, pH, and local seasonal temperatures match crop requirements.\n2. Nutrient Planning: Apply balanced fertilizer based on official Soil Health Card recommendations.\n3. Water Management: Use micro-irrigation (drip/sprinkler) to optimize water productivity.\n4. Crop Protection: Implement scouting and biological traps before chemical intervention.\n\nConnect KrishiGuide to your RAG backend for document-verified answers from localized agricultural manuals.`,
-    sources: ["KrishiGuide Agricultural Knowledge Standard (ICAR & Ministry of Agriculture)"]
+    answer: `Here is practical agronomic guidance for "${question}":\n\n1. Soil & Climate Assessment: Verify that your soil texture, pH, and local seasonal temperatures match crop requirements.\n2. Nutrient Planning: Apply balanced fertilizer based on official Soil Health Card recommendations.\n3. Water Management: Use micro-irrigation (drip/sprinkler) to optimize water productivity.\n4. Crop Protection: Implement scouting and biological traps before chemical intervention.\n\nConnect AI Smart Farming Assistant to your RAG backend for document-verified answers from localized agricultural manuals.`,
+    sources: ["AI Smart Farming Assistant Knowledge Standard (ICAR & Ministry of Agriculture)"]
   };
 }
 
@@ -139,7 +139,7 @@ export default function App() {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content: "Namaste! I'm KrishiGuide AI, your smart farming assistant. Ask me about crops, soil health, irrigation, fertilizers, and sustainable farming.",
+      content: "Namaste! I'm your AI Smart Farming Assistant. Ask me about crops, soil health, irrigation, fertilizers, and sustainable farming.",
       sources: []
     }
   ]);
@@ -220,8 +220,8 @@ export default function App() {
               <Leaf size={24} />
             </div>
             <div>
-              <div className="brand-name">KrishiGuide AI</div>
-              <div className="brand-sub">SMART FARMING ASSISTANT</div>
+              <div className="brand-name">AI Smart Farming Assistant</div>
+              <div className="brand-sub">INTELLIGENT AGRONOMIC ADVISORY</div>
             </div>
           </div>
 
@@ -250,10 +250,10 @@ export default function App() {
               <Sprout size={21} color="#d0f1a8" />
               <p>Grow smarter with AI-powered agricultural knowledge and practical farming guidance.</p>
               <button onClick={() => askQuestion("Give me a practical farming plan for my field.")}>
-                Ask KrishiGuide <ArrowRight size={13} style={{ verticalAlign: "middle" }} />
+                Ask AI Assistant <ArrowRight size={13} style={{ verticalAlign: "middle" }} />
               </button>
             </div>
-            <div className="sidebar-footer">KrishiGuide AI · Smart agriculture</div>
+            <div className="sidebar-footer">AI Smart Farming Assistant · Smart agriculture</div>
           </div>
         </aside>
 
@@ -457,10 +457,10 @@ export default function App() {
                         <Sprout size={20} />
                       </div>
                       <div>
-                        <h3>KrishiGuide AI</h3>
+                        <h3>AI Smart Farming Assistant</h3>
                         <p>
                           <span className="online-dot" style={{ display: "inline-block", marginRight: 7 }} />
-                          Farming assistant
+                          Intelligent agronomy advisor
                         </p>
                       </div>
                     </div>
@@ -469,7 +469,7 @@ export default function App() {
                       {messages.map((message, i) => (
                         <div className={`message ${message.role}`} key={i}>
                           <div className="message-avatar">
-                            {message.role === "assistant" ? <Leaf size={16} /> : "KG"}
+                            {message.role === "assistant" ? <Leaf size={16} /> : "You"}
                           </div>
                           <div className="bubble">
                             {message.content}
@@ -710,7 +710,7 @@ export default function App() {
 
             <footer style={{ textAlign: "center", color: "#8a9988", fontSize: "11px", padding: "35px 0 0" }}>
               <Leaf size={13} style={{ verticalAlign: "middle", marginRight: 5 }} />
-              KrishiGuide AI · Smart Farming Assistant · Verify important decisions with local agricultural experts.
+              AI Smart Farming Assistant · Verify important decisions with local agricultural experts.
             </footer>
           </div>
         </main>

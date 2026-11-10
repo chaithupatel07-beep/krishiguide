@@ -10,7 +10,7 @@ from app.core.security import hash_password, create_access_token
 async def create_user_with_role(role: str) -> tuple[User, str]:
     """Helper to create a user with a given role and generate an access token."""
     ts = int(datetime.now().timestamp() * 1000)
-    email = f"user_{role}_{ts}@krishiguide.org"
+    email = f"user_{role}_{ts}@smartfarming.org"
     async with AsyncSessionLocal() as session:
         user = User(
             full_name=f"Test {role.capitalize()}",

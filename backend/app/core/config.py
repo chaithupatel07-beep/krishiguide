@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "KrishiGuide AI"
+    PROJECT_NAME: str = "AI Smart Farming Assistant"
     VERSION: str = "1.0.0"
     ENVIRONMENT: str = "development"
     API_V1_STR: str = "/api"

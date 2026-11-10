@@ -48,7 +48,7 @@ async def test_crud_and_relationships():
     """Test comprehensive CRUD operations and foreign key relationships."""
     async with AsyncSessionLocal() as session:
         # 1. Create Farmer User
-        unique_email = f"farmer_{int(datetime.now().timestamp() * 1000)}@krishiguide.org"
+        unique_email = f"farmer_{int(datetime.now().timestamp() * 1000)}@smartfarming.org"
         user = User(
             full_name="Ramesh Patel",
             email=unique_email,

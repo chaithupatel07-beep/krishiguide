@@ -1,2 +1,2 @@
-"""KrishiGuide AI Backend Application Package."""
+"""AI Smart Farming Assistant Backend Application Package."""
 

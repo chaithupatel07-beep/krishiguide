@@ -20,7 +20,7 @@ def anyio_backend():
 async def test_chat_query_creates_conversation_and_messages():
     """Verify POST /api/chat creates conversation, user message, assistant message, and citations."""
     ts = int(datetime.now().timestamp() * 1000)
-    farmer_email = f"farmer_chat_{ts}@krishiguide.org"
+    farmer_email = f"farmer_chat_{ts}@smartfarming.org"
 
     async with AsyncSessionLocal() as session:
         user = User(
@@ -84,7 +84,7 @@ async def test_chat_query_creates_conversation_and_messages():
 async def test_chat_follow_up_turn():
     """Verify follow-up questions in same conversation thread append properly."""
     ts = int(datetime.now().timestamp() * 1000)
-    farmer_email = f"farmer_followup_{ts}@krishiguide.org"
+    farmer_email = f"farmer_followup_{ts}@smartfarming.org"
 
     async with AsyncSessionLocal() as session:
         user = User(
@@ -137,7 +137,7 @@ async def test_chat_follow_up_turn():
 async def test_get_history_and_conversation_details():
     """Verify GET /api/chat/history and GET /api/chat/{id}."""
     ts = int(datetime.now().timestamp() * 1000)
-    farmer_email = f"farmer_history_{ts}@krishiguide.org"
+    farmer_email = f"farmer_history_{ts}@smartfarming.org"
 
     async with AsyncSessionLocal() as session:
         user = User(
@@ -185,7 +185,7 @@ async def test_get_history_and_conversation_details():
 async def test_report_inaccurate_response():
     """Verify reporting an AI response creates an ExpertCase and audit log."""
     ts = int(datetime.now().timestamp() * 1000)
-    farmer_email = f"farmer_rep_{ts}@krishiguide.org"
+    farmer_email = f"farmer_rep_{ts}@smartfarming.org"
 
     async with AsyncSessionLocal() as session:
         user = User(
@@ -240,8 +240,8 @@ async def test_report_inaccurate_response():
 async def test_farmer_data_isolation():
     """Verify farmers cannot access, report, or delete other farmers' conversations."""
     ts = int(datetime.now().timestamp() * 1000)
-    farmer1_email = f"farmer1_iso_{ts}@krishiguide.org"
-    farmer2_email = f"farmer2_iso_{ts}@krishiguide.org"
+    farmer1_email = f"farmer1_iso_{ts}@smartfarming.org"
+    farmer2_email = f"farmer2_iso_{ts}@smartfarming.org"
 
     async with AsyncSessionLocal() as session:
         f1 = User(full_name="Farmer One", email=farmer1_email, hashed_password=hash_password("Pass123!"), role="farmer", account_status="active")
@@ -307,7 +307,7 @@ async def test_frontend_assistant_query_compatibility():
 
         # 2. Authenticated frontend call
         ts = int(datetime.now().timestamp() * 1000)
-        email = f"farmer_fe_{ts}@krishiguide.org"
+        email = f"farmer_fe_{ts}@smartfarming.org"
         async with AsyncSessionLocal() as session:
             user = User(
                 full_name="Frontend Farmer",
@@ -337,7 +337,7 @@ async def test_frontend_assistant_query_compatibility():
 async def test_delete_conversation():
     """Verify owner can delete their conversation and cascading messages are removed."""
     ts = int(datetime.now().timestamp() * 1000)
-    email = f"farmer_del_{ts}@krishiguide.org"
+    email = f"farmer_del_{ts}@smartfarming.org"
 
     async with AsyncSessionLocal() as session:
         user = User(

@@ -18,7 +18,7 @@ def anyio_backend():
 async def test_security_password_hashes_never_exposed():
     """Verify that user API responses never leak hashed_password or secrets."""
     ts = int(datetime.now().timestamp() * 1000)
-    farmer_email = f"sec_user_{ts}@krishiguide.org"
+    farmer_email = f"sec_user_{ts}@smartfarming.org"
 
     async with AsyncSessionLocal() as session:
         user = User(
@@ -51,7 +51,7 @@ async def test_security_password_hashes_never_exposed():
 async def test_security_sql_injection_resilience():
     """Verify that SQL injection payloads in parameters do not execute or compromise data."""
     ts = int(datetime.now().timestamp() * 1000)
-    farmer_email = f"sqli_user_{ts}@krishiguide.org"
+    farmer_email = f"sqli_user_{ts}@smartfarming.org"
 
     async with AsyncSessionLocal() as session:
         user = User(
@@ -93,8 +93,8 @@ async def test_security_sql_injection_resilience():
 async def test_security_admin_endpoint_strict_isolation():
     """Verify all admin endpoints reject non-admin tokens with 403 Forbidden."""
     ts = int(datetime.now().timestamp() * 1000)
-    farmer_email = f"f_probe_{ts}@krishiguide.org"
-    expert_email = f"e_probe_{ts}@krishiguide.org"
+    farmer_email = f"f_probe_{ts}@smartfarming.org"
+    expert_email = f"e_probe_{ts}@smartfarming.org"
 
     async with AsyncSessionLocal() as session:
         f = User(full_name="Farmer Probe", email=farmer_email, hashed_password=hash_password("Pass123!"), role="farmer", account_status="active")

@@ -25,7 +25,7 @@ router = APIRouter(tags=["AI Chat & Conversations"])
     "/api/chat",
     response_model=ChatResponse,
     status_code=status.HTTP_200_OK,
-    summary="Submit agricultural question to KrishiGuide AI RAG assistant",
+    summary="Submit agricultural question to AI Smart Farming Assistant RAG assistant",
 )
 async def submit_chat_message(
     payload: ChatQueryRequest,
