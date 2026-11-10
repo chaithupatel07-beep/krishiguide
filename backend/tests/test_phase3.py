@@ -11,7 +11,7 @@ async def test_register_farmer_success():
     """Verify registration of a new farmer returns 201 and default role 'farmer'."""
     transport = ASGITransport(app=app)
     ts = int(datetime.now().timestamp() * 1000)
-    email = f"farmer_test_{ts}@krishiguide.org"
+    email = f"farmer_test_{ts}@smartfarming.org"
 
     payload = {
         "full_name": "Sita Ram",
@@ -35,7 +35,7 @@ async def test_register_duplicate_email_rejected():
     """Verify duplicate email registration is rejected with HTTP 400."""
     transport = ASGITransport(app=app)
     ts = int(datetime.now().timestamp() * 1000)
-    email = f"duplicate_{ts}@krishiguide.org"
+    email = f"duplicate_{ts}@smartfarming.org"
 
     payload = {
         "full_name": "Original User",
@@ -62,7 +62,7 @@ async def test_register_admin_role_escalation_rejected():
     # Attempt to self-register as admin
     admin_payload = {
         "full_name": "Hacker Admin",
-        "email": f"hacker_admin_{ts}@krishiguide.org",
+        "email": f"hacker_admin_{ts}@smartfarming.org",
         "password": "Password123!",
         "role": "admin",
     }
@@ -73,7 +73,7 @@ async def test_register_admin_role_escalation_rejected():
     # Attempt to self-register as expert
     expert_payload = {
         "full_name": "Fake Expert",
-        "email": f"fake_expert_{ts}@krishiguide.org",
+        "email": f"fake_expert_{ts}@smartfarming.org",
         "password": "Password123!",
         "role": "expert",
     }
@@ -87,7 +87,7 @@ async def test_login_success_and_get_me():
     """Verify login with valid credentials returns JWT and /api/auth/me returns profile."""
     transport = ASGITransport(app=app)
     ts = int(datetime.now().timestamp() * 1000)
-    email = f"auth_user_{ts}@krishiguide.org"
+    email = f"auth_user_{ts}@smartfarming.org"
     password = "CorrectPassword123!"
 
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
@@ -127,7 +127,7 @@ async def test_login_incorrect_password_rejected():
     """Verify login with incorrect password returns HTTP 401."""
     transport = ASGITransport(app=app)
     ts = int(datetime.now().timestamp() * 1000)
-    email = f"wrong_pwd_{ts}@krishiguide.org"
+    email = f"wrong_pwd_{ts}@smartfarming.org"
 
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
         await ac.post("/api/auth/register", json={
@@ -164,7 +164,7 @@ async def test_login_suspended_account_rejected():
     """Verify that deactivated or suspended accounts cannot login (HTTP 403)."""
     transport = ASGITransport(app=app)
     ts = int(datetime.now().timestamp() * 1000)
-    email = f"suspended_{ts}@krishiguide.org"
+    email = f"suspended_{ts}@smartfarming.org"
     password = "MyPassword123!"
 
     async with AsyncClient(transport=transport, base_url="http://test") as ac:

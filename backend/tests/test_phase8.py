@@ -20,7 +20,7 @@ def anyio_backend():
 async def test_farm_profile_create_and_update():
     """Verify PUT /api/farm/profile creates and updates farmer profile."""
     ts = int(datetime.now().timestamp() * 1000)
-    farmer_email = f"farmer_profile_{ts}@krishiguide.org"
+    farmer_email = f"farmer_profile_{ts}@smartfarming.org"
 
     async with AsyncSessionLocal() as session:
         user = User(
@@ -85,7 +85,7 @@ async def test_farm_profile_create_and_update():
 async def test_cultivation_cost_calculator():
     """Verify cultivation cost calculator with exact Decimal arithmetic."""
     ts = int(datetime.now().timestamp() * 1000)
-    farmer_email = f"farmer_calc_{ts}@krishiguide.org"
+    farmer_email = f"farmer_calc_{ts}@smartfarming.org"
 
     async with AsyncSessionLocal() as session:
         user = User(
@@ -142,7 +142,7 @@ async def test_cultivation_cost_calculator():
 async def test_farm_expense_tracker_and_filters():
     """Verify adding expenses and querying with filters and totals."""
     ts = int(datetime.now().timestamp() * 1000)
-    farmer_email = f"farmer_exp_{ts}@krishiguide.org"
+    farmer_email = f"farmer_exp_{ts}@smartfarming.org"
 
     async with AsyncSessionLocal() as session:
         user = User(
@@ -238,7 +238,7 @@ async def test_farm_expense_tracker_and_filters():
 async def test_crop_task_scheduler_and_status_update():
     """Verify scheduling tasks, updating status, and filtering."""
     ts = int(datetime.now().timestamp() * 1000)
-    farmer_email = f"farmer_task_{ts}@krishiguide.org"
+    farmer_email = f"farmer_task_{ts}@smartfarming.org"
 
     async with AsyncSessionLocal() as session:
         user = User(
@@ -302,8 +302,8 @@ async def test_crop_task_scheduler_and_status_update():
 async def test_farmer_isolation_on_farm_tools():
     """Verify farmers cannot delete or modify other farmers' expenses or tasks."""
     ts = int(datetime.now().timestamp() * 1000)
-    f1_email = f"f1_tools_{ts}@krishiguide.org"
-    f2_email = f"f2_tools_{ts}@krishiguide.org"
+    f1_email = f"f1_tools_{ts}@smartfarming.org"
+    f2_email = f"f2_tools_{ts}@smartfarming.org"
 
     async with AsyncSessionLocal() as session:
         f1 = User(full_name="F1 Tools", email=f1_email, hashed_password=hash_password("Pass123!"), role="farmer", account_status="active")

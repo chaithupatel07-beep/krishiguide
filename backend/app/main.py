@@ -41,7 +41,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    description="Backend API for KrishiGuide AI - Smart Farming Assistant & Agronomic Advisory",
+    description="Backend API for AI Smart Farming Assistant - Intelligent Agronomic Advisory & Farm Management",
     docs_url="/docs",
     redoc_url="/redoc",
     openapi_url="/openapi.json",

@@ -75,7 +75,7 @@ async def test_vector_search_and_grounded_retrieval():
     async with AsyncSessionLocal() as session:
         user = User(
             full_name="Agronomy Researcher",
-            email=f"agri_rag_{ts}@krishiguide.org",
+            email=f"agri_rag_{ts}@smartfarming.org",
             hashed_password=hash_password("Pass123!"),
             role="admin",
             account_status="active",
@@ -134,7 +134,7 @@ async def test_rag_pipeline_end_to_end_with_citations():
     async with AsyncSessionLocal() as session:
         user = User(
             full_name="Farmer Ramesh",
-            email=f"farmer_rag_{ts}@krishiguide.org",
+            email=f"farmer_rag_{ts}@smartfarming.org",
             hashed_password=hash_password("Pass123!"),
             role="farmer",
             account_status="active",
@@ -185,7 +185,7 @@ async def test_insufficient_context_handling():
     async with AsyncSessionLocal() as session:
         user = User(
             full_name="Farmer Testing",
-            email=f"farmer_insuf_{ts}@krishiguide.org",
+            email=f"farmer_insuf_{ts}@smartfarming.org",
             hashed_password=hash_password("Pass123!"),
             role="farmer",
             account_status="active",
@@ -217,7 +217,7 @@ async def test_telugu_language_preference():
     async with AsyncSessionLocal() as session:
         user = User(
             full_name="Farmer Telugu",
-            email=f"farmer_telugu_{ts}@krishiguide.org",
+            email=f"farmer_telugu_{ts}@smartfarming.org",
             hashed_password=hash_password("Pass123!"),
             role="farmer",
             account_status="active",

@@ -1,4 +1,4 @@
-# KrishiGuide AI — Project Inspection Report & Migration Plan (Phase 0)
+# AI Smart Farming Assistant — Project Inspection Report & Migration Plan (Phase 0)
 
 ## 1. Executive Summary & Repository Inspection
 

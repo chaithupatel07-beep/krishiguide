@@ -148,5 +148,5 @@ async def submit_feedback(
 ):
     """Allows authenticated farmers to submit ratings and feedback."""
     fb = await AdminService.create_feedback(db=db, user=current_user, payload=payload)
-    return {"id": fb.id, "detail": "Thank you for your feedback! It helps improve KrishiGuide AI."}
+    return {"id": fb.id, "detail": "Thank you for your feedback! It helps improve AI Smart Farming Assistant."}
 

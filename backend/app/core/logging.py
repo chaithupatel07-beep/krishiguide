@@ -19,7 +19,7 @@ def setup_logging() -> logging.Logger:
     logging.getLogger("uvicorn.access").setLevel(logging.WARNING)
     logging.getLogger("asyncmy").setLevel(logging.WARNING)
     
-    logger = logging.getLogger("krishiguide")
+    logger = logging.getLogger("smart_farming_assistant")
     logger.setLevel(getattr(logging, settings.LOG_LEVEL.upper(), logging.INFO))
     return logger
 

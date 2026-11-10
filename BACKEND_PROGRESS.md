@@ -1,4 +1,4 @@
-# KrishiGuide AI — Backend Development Progress
+# AI Smart Farming Assistant — Backend Development Progress
 
 | Phase | Description | Status | Completed At |
 |---|---|---|---|
@@ -20,7 +20,7 @@
 - Inspected repository structure: React + Vite frontend client at root and `frontend/`.
 - Inspected existing API endpoint expectations: frontend calls `/api/assistant/query` via Vite dev proxy (`127.0.0.1:8000`).
 - Inspected dependencies: Python 3.13, Node 18+, FastAPI & Uvicorn pre-installed.
-- Verified database status: Local PostgreSQL service running on host without existing KrishiGuide tables; MySQL 8+ async migration architecture established.
+- Verified database status: Local PostgreSQL service running on host without existing application tables; MySQL 8+ async migration architecture established.
 - Created `PROJECT_INSPECTION_REPORT.md` and finalized Phase 1-10 execution plan.
 
 ---

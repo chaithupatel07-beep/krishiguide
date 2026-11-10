@@ -1,12 +1,12 @@
-# KrishiGuide AI — Backend Architecture & API Documentation
+# AI Smart Farming Assistant — Backend Architecture & API Documentation
 
-Comprehensive technical documentation for the KrishiGuide AI smart farming backend service.
+Comprehensive technical documentation for the AI Smart Farming Assistant backend service.
 
 ---
 
 ## 1. System Architecture
 
-KrishiGuide AI is an AI-powered smart agriculture assistant providing Retrieval-Augmented Generation (RAG) agronomic advisory, farm management tools, expert escalation queues, and administrative operations.
+AI Smart Farming Assistant is an AI-powered smart agriculture assistant providing Retrieval-Augmented Generation (RAG) agronomic advisory, farm management tools, expert escalation queues, and administrative operations.
 
 ```
                       +-----------------------------+
@@ -79,7 +79,7 @@ KrishiGuide AI is an AI-powered smart agriculture assistant providing Retrieval-
 Copy `.env.example` to `.env` in the `backend/` directory:
 
 ```ini
-PROJECT_NAME="KrishiGuide AI"
+PROJECT_NAME="AI Smart Farming Assistant"
 VERSION="1.0.0"
 ENVIRONMENT="production"
 DEBUG=False

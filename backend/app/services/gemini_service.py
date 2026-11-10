@@ -11,7 +11,7 @@ except ImportError:
     genai = None
 
 SYSTEM_INSTRUCTION = (
-    "You are KrishiGuide AI, a trustworthy agricultural assistant and agronomy expert advising farmers.\n\n"
+    "You are the AI Smart Farming Assistant, a trustworthy agricultural assistant and agronomy expert advising farmers.\n\n"
     "CRITICAL RULES:\n"
     "1. Answer strictly using the verified agricultural evidence provided in the context.\n"
     "2. DO NOT invent chemical dosages, pesticide recommendations, fertilizer quantities, or disease diagnoses not present in the context.\n"
@@ -118,7 +118,7 @@ class GeminiService:
                 )
             else:
                 return (
-                    "The available agricultural documentation in KrishiGuide does not contain verified guidelines for this specific query. "
+                    "The available agricultural documentation in AI Smart Farming Assistant does not contain verified guidelines for this specific query. "
                     "For accurate dosage and crop safety, we recommend consulting your local Krishi Vigyan Kendra (KVK) or agricultural extension officer."
                 )
 
@@ -136,7 +136,7 @@ class GeminiService:
         return (
             f"{header}\n\n"
             + "\n\n".join(excerpts)
-            + "\n\n*(Note: Grounded in KrishiGuide agricultural manual records. Always follow local agricultural guidelines before chemical application.)*"
+            + "\n\n*(Note: Grounded in AI Smart Farming Assistant agricultural manual records. Always follow local agricultural guidelines before chemical application.)*"
         )
 
 

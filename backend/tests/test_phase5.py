@@ -22,7 +22,7 @@ def create_sample_agri_pdf() -> bytes:
     page1 = doc.new_page()
     page1.insert_text(
         fitz.Point(50, 72),
-        "KrishiGuide Agricultural Manual - Section 1: Rice and Paddy Cultivation.\n\n"
+        "AI Smart Farming Assistant Agricultural Manual - Section 1: Rice and Paddy Cultivation.\n\n"
         "Rice requires deep clayey or loamy soils with high moisture retention capacity. "
         "The ideal soil pH range is between 5.5 and 7.0. Field preparation requires deep summer ploughing "
         "followed by two passes of harrowing to ensure a fine tilth. Incorporate 10 tonnes per hectare "
@@ -35,7 +35,7 @@ def create_sample_agri_pdf() -> bytes:
     page2 = doc.new_page()
     page2.insert_text(
         fitz.Point(50, 72),
-        "KrishiGuide Agricultural Manual - Section 2: Integrated Pest Management in Cotton.\n\n"
+        "AI Smart Farming Assistant Agricultural Manual - Section 2: Integrated Pest Management in Cotton.\n\n"
         "Cotton is susceptible to sucking pests such as aphids, jassids, and whiteflies during early vegetative growth. "
         "Install yellow sticky traps at 15 to 20 traps per hectare to monitor whitefly populations. "
         "For pink bollworm management, install gossyplure pheromone traps at 5 traps per acre. "
@@ -53,7 +53,7 @@ async def get_test_admin() -> tuple[User, str]:
     async with AsyncSessionLocal() as session:
         user = User(
             full_name="Agri Admin",
-            email=f"admin_doc_{ts}@krishiguide.org",
+            email=f"admin_doc_{ts}@smartfarming.org",
             hashed_password=hash_password("AdminPass123!"),
             role="admin",
             account_status="active",
