@@ -82,15 +82,15 @@ class RAGPipeline:
         seen_citations = set()
 
         for c in chunks:
-            citation_key = (c["document_name"], c["page_number"])
+            citation_key = (c.get("document_name"), c.get("page_number"))
             if citation_key not in seen_citations:
                 seen_citations.add(citation_key)
-                snippet = c["text"][:160].replace("\n", " ").strip() + "..."
+                snippet = (c.get("text") or "")[:160].replace("\n", " ").strip() + "..."
                 sources.append({
-                    "document_id": c["document_id"],
-                    "document_name": c["document_name"],
-                    "page_number": c["page_number"],
-                    "similarity_score": c["similarity_score"],
+                    "document_id": c.get("document_id"),
+                    "document_name": c.get("document_name") or "Agricultural Manual",
+                    "page_number": c.get("page_number", 1),
+                    "similarity_score": round(float(c.get("score") or c.get("similarity_score") or 0.0), 3),
                     "snippet": snippet,
                 })
 

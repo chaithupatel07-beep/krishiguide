@@ -43,4 +43,5 @@ backend/uploads/*
 .coverage
 htmlcov/
 *.sqlite3
+*.db
 qdrant_storage/

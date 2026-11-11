@@ -1,7 +1,53 @@
 from typing import Optional, List, Any
+import json
 from sqlalchemy import Integer, String, Text, BigInteger, Boolean, ForeignKey, JSON
+from sqlalchemy.types import TypeDecorator
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database.base import Base, TimestampMixin
+
+
+class VectorType(TypeDecorator):
+    """
+    Platform-independent vector type.
+    Uses PostgreSQL's pgvector Vector(dim) when on postgresql dialect,
+    and falls back to JSON on SQLite/MySQL engines.
+    """
+    impl = JSON
+    cache_ok = True
+
+    def __init__(self, dim: int = 384, *args, **kwargs):
+        self.dim = dim
+        super().__init__(*args, **kwargs)
+
+    def load_dialect_impl(self, dialect):
+        if dialect.name == "postgresql":
+            try:
+                from pgvector.sqlalchemy import Vector
+                return dialect.type_descriptor(Vector(self.dim))
+            except Exception:
+                return dialect.type_descriptor(JSON())
+        return dialect.type_descriptor(JSON())
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return None
+        if dialect.name == "postgresql":
+            return value
+        if isinstance(value, list):
+            return value
+        return list(value)
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return None
+        if isinstance(value, list):
+            return value
+        if isinstance(value, str):
+            try:
+                return json.loads(value)
+            except Exception:
+                return value
+        return list(value)
 
 
 class Document(Base, TimestampMixin):
@@ -32,8 +78,8 @@ class DocumentChunk(Base, TimestampMixin):
     chunk_text: Mapped[str] = mapped_column(Text, nullable=False)
     page_number: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
     meta_info: Mapped[Optional[Any]] = mapped_column(JSON, nullable=True)
-    vector_reference: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, index=True)  # Qdrant point UUID
+    vector_reference: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, index=True)  # UUID or vector ID
+    embedding: Mapped[Optional[Any]] = mapped_column(VectorType(384), nullable=True)
 
     # Relationships
     document = relationship("Document", back_populates="chunks")
-

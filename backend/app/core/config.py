@@ -9,17 +9,27 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "AI Smart Farming Assistant"
+    PROJECT_NAME: str = "AI Smart Farming Assistant – AgriAI"
     VERSION: str = "1.0.0"
     ENVIRONMENT: str = "development"
     API_V1_STR: str = "/api"
 
-    # MySQL Database Settings
+    # Database Settings (PostgreSQL default with pgvector, multi-dialect resilient)
+    DB_ENGINE: str = "postgresql"  # "postgresql", "sqlite", "mysql"
+    POSTGRES_HOST: str = "127.0.0.1"
+    POSTGRES_PORT: int = 5432
+    POSTGRES_USER: str = "postgres"
+    POSTGRES_PASSWORD: str = "postgres"
+    POSTGRES_DB: str = "agriai_db"
+
+    # MySQL / Alternative fallback settings
     MYSQL_HOST: str = "127.0.0.1"
     MYSQL_PORT: int = 3306
     MYSQL_USER: str = "root"
     MYSQL_PASSWORD: str = ""
-    MYSQL_DATABASE: str = "smart_farming_db"
+    MYSQL_DATABASE: str = "agriai_db"
+
+    # Generic DATABASE_URL (supports postgresql://, postgresql+asyncpg://, sqlite+aiosqlite://, mysql+asyncmy://)
     DATABASE_URL: str = ""
 
     # Connection Pool Settings
@@ -38,6 +48,9 @@ class Settings(BaseSettings):
 
     # AI & Vector DB
     GEMINI_API_KEY: str = ""
+    LLM_MODEL: str = "gemini-2.0-flash"
+    EMBEDDING_MODEL: str = "sentence-transformers/all-MiniLM-L6-v2"
+    VECTOR_DB_TYPE: str = "pgvector"  # "pgvector", "qdrant", "memory"
     QDRANT_URL: str = "http://127.0.0.1:6333"
     QDRANT_API_KEY: str = ""
     QDRANT_COLLECTION: str = "smart_farming_docs"
@@ -72,23 +85,50 @@ class Settings(BaseSettings):
 
     @property
     def async_database_url(self) -> str:
-        """Returns asynchronous SQLAlchemy database URL for MySQL 8+ with asyncmy driver."""
-        if self.DATABASE_URL and self.DATABASE_URL.startswith("mysql+asyncmy://"):
-            return self.DATABASE_URL
-        
-        # Build clean URL
-        auth_part = self.MYSQL_USER
-        if self.MYSQL_PASSWORD:
-            auth_part += f":{self.MYSQL_PASSWORD}"
-        
-        return (
-            f"mysql+asyncmy://{auth_part}@{self.MYSQL_HOST}:{self.MYSQL_PORT}/"
-            f"{self.MYSQL_DATABASE}?charset=utf8mb4"
-        )
+        """Returns asynchronous SQLAlchemy database URL with automatic driver mapping."""
+        url = self.DATABASE_URL.strip() if self.DATABASE_URL else ""
+        if url:
+            if url.startswith("postgres://"):
+                return url.replace("postgres://", "postgresql+asyncpg://", 1)
+            elif url.startswith("postgresql://"):
+                return url.replace("postgresql://", "postgresql+asyncpg://", 1)
+            elif url.startswith("postgresql+asyncpg://"):
+                return url
+            elif url.startswith("sqlite://"):
+                return url.replace("sqlite://", "sqlite+aiosqlite://", 1)
+            elif url.startswith("sqlite+aiosqlite://"):
+                return url
+            elif url.startswith("mysql://"):
+                return url.replace("mysql://", "mysql+asyncmy://", 1)
+            elif url.startswith("mysql+asyncmy://"):
+                return url
+            return url
+
+        # Construct from PostgreSQL credentials
+        if self.DB_ENGINE == "postgresql":
+            auth_part = self.POSTGRES_USER
+            if self.POSTGRES_PASSWORD:
+                auth_part += f":{self.POSTGRES_PASSWORD}"
+            return (
+                f"postgresql+asyncpg://{auth_part}@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/"
+                f"{self.POSTGRES_DB}"
+            )
+
+        if self.DB_ENGINE == "mysql":
+            auth_part = self.MYSQL_USER
+            if self.MYSQL_PASSWORD:
+                auth_part += f":{self.MYSQL_PASSWORD}"
+            return (
+                f"mysql+asyncmy://{auth_part}@{self.MYSQL_HOST}:{self.MYSQL_PORT}/"
+                f"{self.MYSQL_DATABASE}?charset=utf8mb4"
+            )
+
+        # Default SQLite fallback
+        sqlite_file = BASE_DIR / "agriai.db"
+        return f"sqlite+aiosqlite:///{sqlite_file.as_posix()}"
 
 
 settings = Settings()
 
 # Ensure uploads directory exists
 os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
-

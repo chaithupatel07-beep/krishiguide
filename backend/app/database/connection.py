@@ -9,16 +9,26 @@ from sqlalchemy import text
 from app.core.config import settings
 from app.core.logging import logger
 
-# Create SQLAlchemy 2.x AsyncEngine with asyncmy driver & pooling
-engine: AsyncEngine = create_async_engine(
-    settings.async_database_url,
-    echo=settings.ENVIRONMENT == "development",
-    pool_size=settings.DB_POOL_SIZE,
-    max_overflow=settings.DB_MAX_OVERFLOW,
-    pool_recycle=settings.DB_POOL_RECYCLE,
-    pool_pre_ping=settings.DB_POOL_PRE_PING,
-    future=True,
-)
+# Construct resilient engine args based on driver
+db_url = settings.async_database_url
+engine_kwargs = {
+    "echo": settings.ENVIRONMENT == "development",
+    "future": True,
+}
+
+if "sqlite" in db_url:
+    engine_kwargs["connect_args"] = {"check_same_thread": False}
+else:
+    engine_kwargs.update(
+        {
+            "pool_size": settings.DB_POOL_SIZE,
+            "max_overflow": settings.DB_MAX_OVERFLOW,
+            "pool_recycle": settings.DB_POOL_RECYCLE,
+            "pool_pre_ping": settings.DB_POOL_PRE_PING,
+        }
+    )
+
+engine: AsyncEngine = create_async_engine(db_url, **engine_kwargs)
 
 # Async session factory
 AsyncSessionLocal = async_sessionmaker(
@@ -47,19 +57,19 @@ async def check_db_connection() -> dict:
     """Executes a ping query to verify database readiness."""
     try:
         async with engine.connect() as conn:
-            result = await conn.execute(text("SELECT 1 AS alive, VERSION() AS version"))
+            result = await conn.execute(text("SELECT 1 AS alive"))
             row = result.mappings().first()
+            dialect_name = engine.dialect.name
             return {
                 "status": "ready",
-                "database": "MySQL",
+                "database": dialect_name.capitalize(),
                 "connected": True,
-                "version": row["version"] if row else "unknown",
             }
     except Exception as e:
-        logger.error(f"Database readiness check failed: {e}")
+        logger.warning(f"Database readiness check failed: {e}")
         return {
             "status": "unhealthy",
-            "database": "MySQL",
+            "database": engine.dialect.name if hasattr(engine, "dialect") else "Unknown",
             "connected": False,
             "error": str(e),
         }
@@ -69,4 +79,3 @@ async def close_db() -> None:
     """Closes the async database engine connection pool."""
     logger.info("Disposing database connection pool...")
     await engine.dispose()
-

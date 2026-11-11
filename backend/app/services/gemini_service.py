@@ -125,7 +125,10 @@ class GeminiService:
         # Compile evidence from top chunks
         excerpts = []
         for i, c in enumerate(context_chunks[:2]):
-            excerpts.append(f"• According to **{c['document_name']}** (Page {c['page_number']}):\n  \"{c['text']}\"")
+            d_name = c.get("document_name") or "Verified Agricultural Guide"
+            p_num = c.get("page_number", 1)
+            txt = c.get("text") or ""
+            excerpts.append(f"• According to **{d_name}** (Page {p_num}):\n  \"{txt}\"")
 
         header = f"Based on verified agricultural documentation for **{question}**:"
         if language == "Telugu":

@@ -33,6 +33,9 @@ router = APIRouter(prefix="/documents", tags=["Documents & Ingestion"])
 MAX_FILE_SIZE_BYTES = 25 * 1024 * 1024  # 25 MB
 
 
+SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".doc", ".txt", ".md"}
+
+
 def sanitize_filename(filename: str) -> str:
     """Strips path traversal sequences and dangerous characters."""
     clean = Path(filename).name
@@ -44,29 +47,23 @@ def sanitize_filename(filename: str) -> str:
     "/upload",
     response_model=DocumentResponse,
     status_code=status.HTTP_201_CREATED,
-    summary="Upload an agricultural PDF document",
-    description="Uploads a PDF, stores it securely, creates a database record, and queues background ingestion.",
+    summary="Upload an agricultural document (PDF, DOCX, TXT)",
+    description="Uploads a PDF, DOCX, or TXT file, stores it securely, creates a database record, and queues ingestion.",
 )
 async def upload_document(
     background_tasks: BackgroundTasks,
-    file: UploadFile = File(..., description="Agricultural PDF document to ingest"),
+    file: UploadFile = File(..., description="Agricultural document to ingest"),
     is_public: bool = Form(True, description="Whether document is public or private"),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     # 1. Validate file extension
-    original_name = file.filename or "uploaded.pdf"
-    if not original_name.lower().endswith(".pdf"):
+    original_name = file.filename or "uploaded_document.pdf"
+    file_ext = Path(original_name).suffix.lower()
+    if file_ext not in SUPPORTED_EXTENSIONS:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid file format. Only PDF files are supported.",
-        )
-
-    # 2. Validate MIME type
-    if file.content_type and "pdf" not in file.content_type.lower():
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid content type. Expected 'application/pdf'.",
+            detail=f"Invalid file format '{file_ext}'. Supported formats: PDF, DOCX, DOC, TXT.",
         )
 
     # 3. Read content and check size limit
@@ -99,7 +96,7 @@ async def upload_document(
     doc = Document(
         document_name=clean_name,
         file_path=str(save_path),
-        file_type="application/pdf",
+        file_type=file.content_type or f"application/{file_ext.lstrip('.')}",
         file_size=file_size,
         uploaded_by=current_user.id,
         is_public=effective_is_public,
