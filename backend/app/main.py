@@ -24,13 +24,34 @@ from app.api.expert import router as expert_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    """Application lifespan manager for startup and graceful shutdown."""
+    """Application lifespan manager for startup, pgvector check, table setup, and graceful shutdown."""
     logger.info(f"Starting {settings.PROJECT_NAME} v{settings.VERSION} [{settings.ENVIRONMENT}]")
     db_status = await check_db_connection()
     if db_status.get("connected"):
-        logger.info(f"Connected to MySQL successfully. Version: {db_status.get('version')}")
+        logger.info(f"Connected to database successfully ({db_status.get('database')})")
+        try:
+            from app.database.base import Base
+            import app.models  # noqa
+            from app.database.connection import engine, AsyncSessionLocal
+            from app.services.seed_service import seed_verified_agricultural_documents
+            from sqlalchemy import text
+
+            async with engine.begin() as conn:
+                if conn.dialect.name == "postgresql":
+                    try:
+                        await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
+                        logger.info("PostgreSQL pgvector extension active.")
+                    except Exception as ve:
+                        logger.info(f"PostgreSQL pgvector extension check: {ve}")
+                await conn.run_sync(Base.metadata.create_all)
+                logger.info("SQL database schema verified/created.")
+
+            async with AsyncSessionLocal() as session:
+                await seed_verified_agricultural_documents(session)
+        except Exception as e:
+            logger.warning(f"Database auto-setup step notice: {e}")
     else:
-        logger.warning(f"MySQL connection warning at startup: {db_status.get('error')}")
+        logger.warning(f"Database connection warning at startup: {db_status.get('error')}")
 
     yield
 
