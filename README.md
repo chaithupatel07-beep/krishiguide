@@ -1,19 +1,21 @@
-# 🌾 AI Smart Farming Assistant
+# 🌾 AI SMART FARMING ASSISTANT – AgriAI
+
+> **AgriAI: Smart Farming Assistant**
+> *Empowering farmers with trusted, contextual agricultural intelligence, crop advisory, water conservation methods, soil fertility management, and AI-driven agronomic guidance using Retrieval-Augmented Generation (RAG).*
 
 [![React](https://img.shields.io/badge/React-18.3+-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-6.0+-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Lucide](https://img.shields.io/badge/Lucide-Icons-F56565?logo=feather&logoColor=white)](https://lucide.dev/)
 [![Vercel](https://img.shields.io/badge/Deploy-Vercel-black?logo=vercel&logoColor=white)](https://vercel.com/)
 [![Netlify](https://img.shields.io/badge/Deploy-Netlify-00C7B7?logo=netlify&logoColor=white)](https://www.netlify.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> **Empowering farmers with trusted, contextual agricultural intelligence, crop advisory, water conservation methods, soil fertility management, and AI-driven agronomic guidance.**
-
 ---
 
 ## 🌟 Overview
 
-**AI Smart Farming Assistant** is a modern, responsive web application designed for farmers, agricultural extension workers, and agronomy researchers. It bridges the gap between scientific agricultural research (ICAR, agricultural universities, and Ministry of Agriculture guidelines) and ground-level farming decisions.
+**AI Smart Farming Assistant (AgriAI)** is a complete, production-style, full-stack agricultural web platform. Designed to mirror modern precision farming dashboards, AgriAI delivers real-time agronomic insights, soil fertility calculators, pest and disease diagnostics, irrigation scheduling, and multi-lingual RAG-grounded advisory backed by ICAR, state agricultural universities, and Ministry of Agriculture guidelines.
 
 Whether deployed as a standalone frontend or paired with a Retrieval-Augmented Generation (RAG) backend, AI Smart Farming Assistant provides clear, actionable advice across crop lifecycles.
 
