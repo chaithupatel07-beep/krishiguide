@@ -15,6 +15,9 @@ def hash_password(password: str) -> str:
     return hashed.decode("utf-8")
 
 
+get_password_hash = hash_password
+
+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verifies a plaintext password against a stored bcrypt hash."""
     try:

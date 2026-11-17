@@ -264,6 +264,50 @@ class VectorStoreService:
         except Exception as e:
             logger.info(f"pgvector query bypass ({e}), falling back to vector store service.")
 
+        # Fallback: If in-memory vectors are empty or incomplete, load directly from SQL database document_chunks
+        try:
+            from app.models.document import Document, DocumentChunk
+            stmt = select(
+                DocumentChunk.id,
+                DocumentChunk.document_id,
+                DocumentChunk.chunk_index,
+                DocumentChunk.chunk_text,
+                DocumentChunk.page_number,
+                DocumentChunk.embedding,
+                Document.document_name,
+            ).join(Document, Document.id == DocumentChunk.document_id)
+            if allowed_doc_ids:
+                stmt = stmt.where(DocumentChunk.document_id.in_(allowed_doc_ids))
+            
+            db_chunks = (await db.execute(stmt)).all()
+            if db_chunks:
+                q_vec = np.array(query_vector, dtype=np.float32)
+                q_norm = np.linalg.norm(q_vec)
+                scored = []
+                for cid, doc_id, cidx, ctext, pnum, emb, dname in db_chunks:
+                    if emb is None:
+                        continue
+                    v = np.array(emb, dtype=np.float32)
+                    v_norm = np.linalg.norm(v)
+                    if v_norm == 0 or q_norm == 0:
+                        continue
+                    cos_sim = float(np.dot(q_vec, v) / (q_norm * v_norm))
+                    if cos_sim >= score_threshold:
+                        scored.append({
+                            "chunk_id": cid,
+                            "document_id": doc_id,
+                            "chunk_index": cidx,
+                            "page_number": pnum,
+                            "text": ctext,
+                            "document_name": dname,
+                            "score": cos_sim,
+                        })
+                scored.sort(key=lambda x: x["score"], reverse=True)
+                if scored:
+                    return scored[:limit]
+        except Exception as dbe:
+            logger.debug(f"Direct DB chunk search fallback notice: {dbe}")
+
         return self.search_chunks(
             query_vector=query_vector,
             limit=limit,

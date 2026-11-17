@@ -1,3 +1,7 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 import asyncio
 import pytest
 from app.database.connection import AsyncSessionLocal, engine
@@ -66,3 +70,4 @@ if __name__ == "__main__":
         print("\nALL RAG PIPELINE TESTS PASSED SUCCESSFULLY!")
 
     asyncio.run(run_all())
+

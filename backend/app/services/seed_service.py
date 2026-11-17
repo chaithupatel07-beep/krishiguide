@@ -222,3 +222,171 @@ async def seed_verified_agricultural_documents(session: AsyncSession) -> int:
         logger.error(f"Error seeding verified documents: {e}", exc_info=True)
         await session.rollback()
         return 0
+
+
+
+async def seed_expert_and_demo_cases(session: AsyncSession):
+    """Seeds default verified agricultural expert, admin, farmer, demo consultation case, and notifications."""
+    from app.models.user import User
+    from app.models.farm_profile import FarmProfile
+    from app.models.expert import AgriculturalExpert, ExpertCase, ExpertResponse, ExpertCaseHistory
+    from app.models.notification import Notification
+    from app.core.security import get_password_hash
+    from datetime import datetime, timezone
+
+    try:
+        # 1. Admin Account
+        admin = (await session.execute(select(User).where(User.email == "admin@smartfarming.org"))).scalars().first()
+        if not admin:
+            admin = User(
+                full_name="AgriAI Administrator",
+                email="admin@smartfarming.org",
+                hashed_password=get_password_hash("admin123"),
+                phone_number="+91 99000 11223",
+                role="admin",
+                account_status="active",
+            )
+            session.add(admin)
+            await session.flush()
+            logger.info("Seeded default admin user: admin@smartfarming.org")
+
+        # 2. Agricultural Expert Account
+        expert_user = (await session.execute(select(User).where(User.email == "expert@smartfarming.org"))).scalars().first()
+        if not expert_user:
+            expert_user = User(
+                full_name="Dr. Sunita Rao",
+                email="expert@smartfarming.org",
+                hashed_password=get_password_hash("expert123"),
+                phone_number="+91 98480 99887",
+                role="expert",
+                account_status="active",
+            )
+            session.add(expert_user)
+            await session.flush()
+
+            expert_profile = AgriculturalExpert(
+                user_id=expert_user.id,
+                qualification="Ph.D. Agronomy, ICAR-CRIDA Senior Scientist",
+                specialization="Agronomy & Crop Protection",
+                experience=14,
+                state="Telangana",
+                district="Hyderabad / Rangareddy",
+                areas_of_expertise=["Rice", "Paddy", "Maize", "Cotton", "IPM", "Soil Health", "Drip Irrigation"],
+                approval_status="approved",
+                availability_status="available",
+            )
+            session.add(expert_profile)
+            await session.flush()
+            logger.info("Seeded default agricultural expert: Dr. Sunita Rao (expert@smartfarming.org)")
+
+        # 3. Farmer Account
+        farmer = (await session.execute(select(User).where(User.email == "ramesh.kumar@smartfarming.org"))).scalars().first()
+        if not farmer:
+            farmer = User(
+                full_name="Ramesh Kumar",
+                email="ramesh.kumar@smartfarming.org",
+                hashed_password=get_password_hash("farmer123"),
+                phone_number="+91 98480 12345",
+                role="farmer",
+                account_status="active",
+            )
+            session.add(farmer)
+            await session.flush()
+
+            farm_prof = FarmProfile(
+                user_id=farmer.id,
+                farm_location="Shamshabad, Rangareddy, Telangana",
+                district="Rangareddy",
+                village="Shamshabad",
+                farm_size=5.50,
+                soil_type="Clay Loam",
+                crop_details=["Rice", "Paddy", "Maize"],
+                irrigation_details={"method": "Canal & Borewell", "frequency": "Weekly"},
+                preferred_language="English",
+            )
+            session.add(farm_prof)
+            await session.flush()
+            logger.info("Seeded default farmer user: Ramesh Kumar (ramesh.kumar@smartfarming.org)")
+
+        # 4. Demo Consultation Case
+        existing_case = (await session.execute(select(ExpertCase).where(ExpertCase.farmer_id == farmer.id))).scalars().first()
+        if not existing_case:
+            case = ExpertCase(
+                farmer_id=farmer.id,
+                expert_id=expert_user.id,
+                crop_name="Paddy (Rice)",
+                category="Pest & Disease Control",
+                question="My paddy crop leaves are folded longitudinally and show transparent white patches with small green caterpillars inside. What is the emergency treatment?",
+                farmer_question="My paddy crop leaves are folded longitudinally and show transparent white patches with small green caterpillars inside. What is the emergency treatment?",
+                priority="high",
+                status="answered",
+                title="Paddy Leaf Folder Infestation - Emergency Treatment",
+                ai_response_snapshot="Based on ICAR guidelines, this matches Rice Leaf Folder (Cnaphalocrocis medinalis). Recommended controls include releasing Trichogramma parasitoids and spraying Flubendiamide 39.35% SC.",
+                source_references=["Rice_Cultivation_Manual.pdf (Page 19)", "Pest_Management.pdf (Page 5)"],
+                expert_response="Confirmed Rice Leaf Folder (Cnaphalocrocis medinalis) exceeding Economic Threshold Level (10% flag leaf injury). Follow the exact dosage and precautions below.",
+                recommendations=["Spray Chlorantraniliprole 18.5% SC @ 60 ml/acre or Flubendiamide 39.35% SC @ 25 ml/acre in 200L water", "Avoid top-dressing urea till pest is suppressed", "Release Trichogramma chilonis egg parasitoid @ 1,00,000/ha"],
+            )
+            session.add(case)
+            await session.flush()
+
+            # Structured Expert Response
+            resp = ExpertResponse(
+                case_id=case.id,
+                expert_id=expert_user.id,
+                response="Confirmed Rice Leaf Folder (Cnaphalocrocis medinalis) exceeding Economic Threshold Level (10% flag leaf injury). Follow the exact dosage and precautions below.",
+                diagnosis="Rice Leaf Folder (Cnaphalocrocis medinalis) at maximum tillering stage. Excessive nitrogen top-dressing may have exacerbated succulent leaf tissue.",
+                recommended_actions=[
+                    "Spray Chlorantraniliprole 18.5% SC @ 60 ml/acre or Flubendiamide 39.35% SC @ 25 ml/acre in 200L water.",
+                    "Release egg parasitoid Trichogramma chilonis @ 1,00,000/ha at 7-day intervals.",
+                    "Immediately hold excess urea/nitrogen top-dressing for 10-12 days.",
+                ],
+                precautions=[
+                    "Spray strictly between 3:30 PM and 6:00 PM when moths and larvae are active.",
+                    "Wear protective mask and chemical-resistant gloves during preparation.",
+                    "Do not allow livestock or poultry into the sprayed field for 7 days.",
+                ],
+                additional_suggestions="Maintain 5 cm standing water during the spray period to allow systemic absorption through the root zone.",
+                supporting_references=[
+                    "ICAR Package of Practices for Rice (2024 Edition, Page 19)",
+                    "Directorate of Rice Research (IIRR) Technical Bulletin #42",
+                ],
+            )
+            session.add(resp)
+
+            # History
+            hist = ExpertCaseHistory(
+                case_id=case.id,
+                previous_status="pending",
+                new_status="answered",
+                changed_by=expert_user.id,
+            )
+            session.add(hist)
+
+            # Notification to farmer
+            notif = Notification(
+                user_id=farmer.id,
+                title="Expert Response: Dr. Sunita Rao",
+                message="Dr. Sunita Rao provided verified agronomic recommendations and precautions for your Paddy Case #1.",
+                type="expert_response",
+                link=f"/farmer/cases/{case.id}",
+                is_read=False,
+            )
+            session.add(notif)
+
+            # Notification to expert
+            notif2 = Notification(
+                user_id=expert_user.id,
+                title="Case #1 Assigned and Resolved",
+                message="You successfully reviewed and answered Case #1 for farmer Ramesh Kumar.",
+                type="case_status",
+                link=f"/expert/cases/{case.id}",
+                is_read=True,
+            )
+            session.add(notif2)
+
+            await session.commit()
+            logger.info("Seeded demo agricultural consultation case #1 and notifications.")
+
+    except Exception as ex:
+        logger.warning(f"Notice while seeding expert and demo cases: {ex}")
+        await session.rollback()

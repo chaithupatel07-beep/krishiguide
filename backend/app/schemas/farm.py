@@ -6,21 +6,27 @@ from pydantic import BaseModel, Field, ConfigDict
 
 # 1. Farm Profile Schemas
 class FarmProfileCreateUpdate(BaseModel):
-    farm_location: str = Field(..., min_length=2, max_length=255, description="Geographic location / Village / District")
+    farm_location: str = Field(..., min_length=2, max_length=255, description="Geographic location / State")
+    district: Optional[str] = Field(None, max_length=100, description="District name")
+    village: Optional[str] = Field(None, max_length=100, description="Village name")
     farm_size: Decimal = Field(..., gt=0, description="Farm size in acres")
     soil_type: str = Field(..., min_length=2, max_length=100, description="Soil classification (e.g., Red sandy loam, Black cotton, Alluvial)")
     crop_details: Optional[Union[List[str], Dict[str, Any]]] = Field(None, description="Current or planned crops")
     irrigation_details: Optional[Union[List[str], Dict[str, Any]]] = Field(None, description="Irrigation facilities (e.g., Drip, Borewell, Canal)")
+    preferred_language: Optional[str] = Field("English", description="Preferred language (English, Telugu, Hindi)")
 
 
 class FarmProfileResponse(BaseModel):
     id: int
     user_id: int
     farm_location: str
+    district: Optional[str] = None
+    village: Optional[str] = None
     farm_size: Decimal
     soil_type: str
     crop_details: Optional[Any] = None
     irrigation_details: Optional[Any] = None
+    preferred_language: str = "English"
     created_at: datetime
     updated_at: datetime
 

@@ -110,8 +110,10 @@ class RoleChecker:
 # Role-specific dependencies
 require_admin = RoleChecker(["admin"])
 require_expert = RoleChecker(["expert", "admin"])
+require_expert_or_admin = require_expert
 require_expert_strict = RoleChecker(["expert"])
 require_farmer = RoleChecker(["farmer", "admin"])
+require_farmer_or_admin = require_farmer
 require_farmer_strict = RoleChecker(["farmer"])
 
 

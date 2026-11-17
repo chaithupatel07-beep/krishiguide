@@ -116,3 +116,6 @@ async def ingest_document(document_id: int) -> bool:
             doc.processing_error = str(e)
             await session.commit()
             return False
+
+
+process_document_background = ingest_document

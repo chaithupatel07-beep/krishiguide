@@ -11,10 +11,13 @@ class FarmProfile(Base, TimestampMixin):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True, index=True)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete="CASCADE"), unique=True, index=True, nullable=False)
     farm_location: Mapped[str] = mapped_column(String(255), nullable=False)
+    district: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    village: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     farm_size: Mapped[Decimal] = mapped_column(Numeric(10, 2), nullable=False, default=Decimal("1.00"))  # in acres
     soil_type: Mapped[str] = mapped_column(String(100), nullable=False)  # Black soil, Red sandy loam, Alluvial, Clay, etc.
     crop_details: Mapped[Optional[Any]] = mapped_column(JSON, nullable=True)  # List or dict of active and planned crops
     irrigation_details: Mapped[Optional[Any]] = mapped_column(JSON, nullable=True)  # Drip, sprinkler, borewell, canal, etc.
+    preferred_language: Mapped[str] = mapped_column(String(32), default="English", nullable=False)
 
     # Relationships
     user = relationship("User", back_populates="farm_profile")

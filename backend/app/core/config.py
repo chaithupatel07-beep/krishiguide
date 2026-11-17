@@ -55,6 +55,20 @@ class Settings(BaseSettings):
     QDRANT_API_KEY: str = ""
     QDRANT_COLLECTION: str = "smart_farming_docs"
 
+    # Advanced RAG Configurations
+    RAG_CHUNK_SIZE: int = 500
+    RAG_CHUNK_OVERLAP: int = 100
+    RAG_TOP_K: int = 4
+    RAG_SIMILARITY_THRESHOLD: float = 0.20
+    RAG_HYBRID_SEARCH: bool = True
+    RAG_DEDUPLICATION_ENABLED: bool = True
+    LLM_REQUEST_TIMEOUT_SECONDS: int = 15
+
+    # Security & Guardrails
+    RATE_LIMIT_PER_MINUTE: int = 60
+    MAX_UPLOAD_SIZE_MB: int = 25
+    SUPPORTED_LANGUAGES: List[str] = ["English", "Telugu", "Hindi"]
+
     # CORS & Networking
     CORS_ORIGINS: Union[str, List[str]] = [
         "http://localhost:5173",

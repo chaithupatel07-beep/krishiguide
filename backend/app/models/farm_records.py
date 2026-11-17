@@ -46,3 +46,4 @@ class AlertNotification(Base, TimestampMixin):
     field_name: Mapped[Optional[str]] = mapped_column(String(128), nullable=True)
     is_read: Mapped[bool] = mapped_column(Boolean, default=False, index=True)
     meta_info: Mapped[Optional[Any]] = mapped_column(JSON, nullable=True)
+

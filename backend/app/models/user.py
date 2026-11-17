@@ -18,12 +18,13 @@ class User(Base, TimestampMixin):
 
     # Relationships
     farm_profile = relationship("FarmProfile", back_populates="user", uselist=False, cascade="all, delete-orphan")
+    expert_profile = relationship("AgriculturalExpert", back_populates="user", uselist=False, cascade="all, delete-orphan")
     documents = relationship("Document", back_populates="uploader", cascade="all, delete-orphan")
     conversations = relationship("Conversation", back_populates="user", cascade="all, delete-orphan")
     expenses = relationship("FarmExpense", back_populates="user", cascade="all, delete-orphan")
     tasks = relationship("CropTask", back_populates="user", cascade="all, delete-orphan")
     farmer_cases = relationship("ExpertCase", foreign_keys="[ExpertCase.farmer_id]", back_populates="farmer", cascade="all, delete-orphan")
     assigned_expert_cases = relationship("ExpertCase", foreign_keys="[ExpertCase.expert_id]", back_populates="expert")
+    notifications = relationship("Notification", back_populates="user", cascade="all, delete-orphan", order_by="Notification.created_at.desc()")
     feedbacks = relationship("Feedback", back_populates="user", cascade="all, delete-orphan")
     audit_logs = relationship("AuditLog", back_populates="user")
-

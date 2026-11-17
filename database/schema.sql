@@ -215,3 +215,104 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX IF NOT EXISTS idx_audit_logs_action ON audit_logs(action);
+
+
+-- ===================================================================
+-- 10. Agricultural Expert Module & In-App Notifications
+-- ===================================================================
+
+CREATE TABLE IF NOT EXISTS agricultural_experts (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+    qualification VARCHAR(255) NOT NULL,
+    specialization VARCHAR(128) NOT NULL,
+    experience INTEGER NOT NULL DEFAULT 5,
+    state VARCHAR(128) NOT NULL DEFAULT 'Telangana',
+    district VARCHAR(128) NOT NULL DEFAULT 'Hyderabad',
+    areas_of_expertise JSONB,
+    profile_image VARCHAR(512),
+    approval_status VARCHAR(32) NOT NULL DEFAULT 'pending', -- 'pending', 'approved', 'rejected'
+    availability_status VARCHAR(32) NOT NULL DEFAULT 'available', -- 'available', 'busy', 'unavailable'
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_agricultural_experts_user ON agricultural_experts(user_id);
+CREATE INDEX IF NOT EXISTS idx_agricultural_experts_specialization ON agricultural_experts(specialization);
+CREATE INDEX IF NOT EXISTS idx_agricultural_experts_approval ON agricultural_experts(approval_status);
+
+CREATE TABLE IF NOT EXISTS expert_cases (
+    id SERIAL PRIMARY KEY,
+    farmer_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    expert_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+    conversation_id INTEGER REFERENCES conversations(id) ON DELETE SET NULL,
+    message_id INTEGER REFERENCES chat_messages(id) ON DELETE SET NULL,
+    crop_name VARCHAR(128) NOT NULL DEFAULT 'General / Mixed',
+    category VARCHAR(128) NOT NULL DEFAULT 'Pest & Disease',
+    question TEXT NOT NULL,
+    priority VARCHAR(32) NOT NULL DEFAULT 'medium', -- 'low', 'medium', 'high', 'urgent'
+    status VARCHAR(32) NOT NULL DEFAULT 'pending', -- 'pending', 'assigned', 'in_progress', 'answered', 'closed'
+    title VARCHAR(255),
+    farmer_question TEXT,
+    ai_response_snapshot TEXT,
+    source_references JSONB,
+    expert_response TEXT,
+    recommendations JSONB,
+    resolved_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_expert_cases_farmer ON expert_cases(farmer_id);
+CREATE INDEX IF NOT EXISTS idx_expert_cases_expert ON expert_cases(expert_id);
+CREATE INDEX IF NOT EXISTS idx_expert_cases_status ON expert_cases(status);
+CREATE INDEX IF NOT EXISTS idx_expert_cases_priority ON expert_cases(priority);
+
+CREATE TABLE IF NOT EXISTS expert_responses (
+    id SERIAL PRIMARY KEY,
+    case_id INTEGER NOT NULL REFERENCES expert_cases(id) ON DELETE CASCADE,
+    expert_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    response TEXT NOT NULL,
+    diagnosis TEXT,
+    recommended_actions JSONB,
+    precautions JSONB,
+    additional_suggestions TEXT,
+    supporting_references JSONB,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_expert_responses_case ON expert_responses(case_id);
+CREATE INDEX IF NOT EXISTS idx_expert_responses_expert ON expert_responses(expert_id);
+
+CREATE TABLE IF NOT EXISTS expert_case_followups (
+    id SERIAL PRIMARY KEY,
+    case_id INTEGER NOT NULL REFERENCES expert_cases(id) ON DELETE CASCADE,
+    sender_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    message TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_expert_case_followups_case ON expert_case_followups(case_id);
+
+CREATE TABLE IF NOT EXISTS expert_case_history (
+    id SERIAL PRIMARY KEY,
+    case_id INTEGER NOT NULL REFERENCES expert_cases(id) ON DELETE CASCADE,
+    previous_status VARCHAR(32),
+    new_status VARCHAR(32) NOT NULL,
+    changed_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_expert_case_history_case ON expert_case_history(case_id);
+
+CREATE TABLE IF NOT EXISTS notifications (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    message TEXT NOT NULL,
+    type VARCHAR(64) NOT NULL DEFAULT 'system',
+    is_read BOOLEAN NOT NULL DEFAULT FALSE,
+    link VARCHAR(255),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id);
+CREATE INDEX IF NOT EXISTS idx_notifications_is_read ON notifications(is_read);

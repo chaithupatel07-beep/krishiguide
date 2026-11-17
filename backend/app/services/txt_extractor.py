@@ -70,3 +70,4 @@ def extract_txt_pages(file_path: str) -> List[Dict[str, Any]]:
 
     logger.info(f"Successfully extracted {len(pages)} sections from {path.name}")
     return pages
+

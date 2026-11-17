@@ -1,13 +1,18 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 import asyncio
 import os
-from pathlib import Path
 import docx
 from app.database.connection import AsyncSessionLocal
 from app.models.document import Document, DocumentChunk
+import pytest
 from app.workers.document_worker import ingest_document
 from app.services.rag import RAGPipeline
 
 
+@pytest.mark.asyncio
 async def test_docx_and_txt_ingestion():
     temp_dir = Path("uploads/test_docs")
     temp_dir.mkdir(parents=True, exist_ok=True)
@@ -101,3 +106,4 @@ async def test_docx_and_txt_ingestion():
 
 if __name__ == "__main__":
     asyncio.run(test_docx_and_txt_ingestion())
+

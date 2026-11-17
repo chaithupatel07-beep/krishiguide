@@ -53,3 +53,4 @@ databases:
     user: agriai_user
     plan: free
     postgresMajorVersion: 16
+

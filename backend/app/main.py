@@ -20,6 +20,8 @@ from app.api.chat import router as chat_router
 from app.api.farm import router as farm_router
 from app.api.admin import router as admin_router
 from app.api.expert import router as expert_router
+from app.api.farmer_expert import router as farmer_expert_router
+from app.api.notifications import router as notifications_router
 
 
 @asynccontextmanager
@@ -33,7 +35,10 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
             from app.database.base import Base
             import app.models  # noqa
             from app.database.connection import engine, AsyncSessionLocal
-            from app.services.seed_service import seed_verified_agricultural_documents
+            from app.services.seed_service import (
+                seed_verified_agricultural_documents,
+                seed_expert_and_demo_cases,
+            )
             from sqlalchemy import text
 
             async with engine.begin() as conn:
@@ -48,6 +53,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
             async with AsyncSessionLocal() as session:
                 await seed_verified_agricultural_documents(session)
+                await seed_expert_and_demo_cases(session)
         except Exception as e:
             logger.warning(f"Database auto-setup step notice: {e}")
     else:
@@ -168,6 +174,8 @@ app.include_router(chat_router)
 app.include_router(farm_router)
 app.include_router(admin_router)
 app.include_router(expert_router)
+app.include_router(farmer_expert_router)
+app.include_router(notifications_router)
 
 # Required Core Phase 1 Endpoints
 @app.get("/api/health", tags=["Health"])
