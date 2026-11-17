@@ -166,6 +166,80 @@ async def global_exception_handler(request: Request, exc: Exception):
     )
 
 
+from app.services.agronomy_service import AgronomyService
+from app.services.rag import RAGPipeline
+from app.services.vector_search import VectorSearchService
+
+# Direct Root API Aliases for Frontend & System Integrations
+@app.post("/api/pest/diagnose", tags=["Pest & Disease Control"])
+async def direct_pest_diagnose(data: dict, db=Depends(check_db_connection)):
+    from app.database.connection import AsyncSessionLocal
+    async with AsyncSessionLocal() as session:
+        return await AgronomyService.diagnose_pest_disease(
+            crop=data.get("crop") or "Rice",
+            affected_part=data.get("affected_part") or data.get("affectedPart") or "Leaves",
+            symptoms=data.get("symptoms") or data.get("observed_symptoms") or "",
+            variety=data.get("variety") or data.get("crop_variety"),
+            growth_stage=data.get("growth_stage") or data.get("growthStage"),
+            location=data.get("location") or data.get("farm_location"),
+            language=data.get("language") or "English",
+            db=session,
+        )
+
+@app.post("/api/fertilizer/calculate", tags=["Fertilizer Guidance"])
+async def direct_fertilizer_calculate(data: dict):
+    return AgronomyService.calculate_fertilizer_plan(
+        crop=data.get("crop") or data.get("target_crop") or "Rice",
+        growth_stage=data.get("growth_stage") or data.get("growthStage") or "Basal / Sowing",
+        soil_type=data.get("soil_type") or data.get("soilType") or "Clay loam",
+        soil_ph=float(data.get("soil_ph") or data.get("soilPh") or 6.8),
+        soil_test_npk=data.get("soil_test_npk") or data.get("soilTestNPK"),
+        cultivation_area=float(data.get("cultivation_area") or data.get("land_area") or data.get("area") or 1.0),
+        area_unit=data.get("area_unit") or data.get("areaUnit") or "acre",
+        farm_location=data.get("farm_location") or data.get("location") or "Telangana",
+        variety=data.get("variety") or data.get("crop_variety"),
+        irrigation_method=data.get("irrigation_method") or data.get("irrigationMethod") or "Surface / Furrow",
+        previous_fertilizer=data.get("previous_fertilizer"),
+        language=data.get("language") or "English",
+    )
+
+@app.post("/api/irrigation/schedule", tags=["Irrigation Advice"])
+async def direct_irrigation_schedule(data: dict):
+    return AgronomyService.calculate_irrigation_schedule(
+        crop=data.get("crop") or "Rice",
+        growth_stage=data.get("growth_stage") or data.get("growthStage") or "Vegetative Stage",
+        soil_type=data.get("soil_type") or data.get("soilType") or "Loamy",
+        soil_moisture=data.get("soil_moisture") or data.get("soilMoisture") or "Normal",
+        farm_location=data.get("farm_location") or data.get("location") or "Telangana",
+        cultivation_area=float(data.get("cultivation_area") or data.get("land_area") or data.get("area") or 1.0),
+        irrigation_method=data.get("irrigation_method") or data.get("irrigationMethod") or "Drip Irrigation",
+        weather_condition=data.get("weather_condition") or data.get("weatherCondition") or "Partly Cloudy",
+        rainfall_info=data.get("rainfall_info") or data.get("rainfall") or "0 mm (Normal dry spell)",
+        language=data.get("language") or "English",
+    )
+
+@app.post("/api/rag/retrieve", tags=["RAG & Knowledge"])
+async def direct_rag_retrieve(data: dict):
+    from app.database.connection import AsyncSessionLocal
+    q = data.get("query") or data.get("question") or ""
+    limit = int(data.get("limit") or 5)
+    threshold = float(data.get("threshold") or 0.3)
+    async with AsyncSessionLocal() as session:
+        chunks = await VectorSearchService.search_agricultural_context(
+            query=q,
+            user_id=0,
+            user_role="farmer",
+            db=session,
+            limit=limit,
+            threshold=threshold,
+        )
+        return {
+            "success": True,
+            "query": q,
+            "count": len(chunks),
+            "chunks": chunks,
+        }
+
 # Include API Routers
 app.include_router(auth_router, prefix="/api")
 app.include_router(rbac_router, prefix="/api")

@@ -19,6 +19,7 @@ from app.schemas.farm import (
     CropTaskResponse,
 )
 from app.services.farm_service import FarmService
+from app.services.agronomy_service import AgronomyService
 
 router = APIRouter(prefix="/api/farm", tags=["Farmer Tools & Farm Management"])
 
@@ -533,104 +534,69 @@ async def recommend_crops(data: dict):
 
 
 @router.post("/fertilizer-guidance", summary="Calculate balanced fertilizer dosages")
+@router.post("/fertilizer/calculate", summary="Calculate balanced fertilizer dosages (alias)")
 async def get_fertilizer_guidance(data: dict):
     """
-    Computes scientific N-P-K nutrient schedules, basal vs top dressing splits,
-    and organic alternatives based on soil and crop stage.
+    Computes scientific N-P-K nutrient schedules, non-double-counting fertilizer bags (Urea, DAP, MOP),
+    stage-wise splits, and organic alternatives based on soil, crop, stage, and acreage.
     """
-    crop = data.get("crop", "Rice")
-    growth_stage = data.get("growth_stage", "Basal / Planting")
-
-    return {
-        "crop": crop,
-        "growth_stage": growth_stage,
-        "nutrient_recommendation": {
-            "Nitrogen (N)": "100–120 kg/ha",
-            "Phosphorus (P2O5)": "50–60 kg/ha",
-            "Potassium (K2O)": "40–50 kg/ha",
-            "Zinc Sulphate (ZnSO4)": "25 kg/ha (Once every 2 years)",
-        },
-        "fertilizer_quantity_per_acre": {
-            "Urea": "55 kg (1.2 bags) - Split into 3 applications",
-            "DAP (Di-Ammonium Phosphate)": "50 kg (1 bag) - Apply 100% as basal",
-            "MOP (Muriate of Potash)": "35 kg (0.7 bag) - 50% basal, 50% at panicle initiation",
-        },
-        "application_schedule": [
-            {"timing": "Basal (At transplanting)", "fertilizer": "50 kg DAP + 17 kg MOP + 15 kg Urea + 10 kg Zinc Sulphate"},
-            {"timing": "Tillering stage (20–25 days after transplanting)", "fertilizer": "20 kg Urea top dressing under thin water layer"},
-            {"timing": "Panicle initiation stage (40–45 days)", "fertilizer": "20 kg Urea + 18 kg MOP for healthy grain filling"},
-        ],
-        "organic_supplements": "Apply 5 tonnes of well-rotted Farmyard Manure (FYM) or 2 tonnes of Vermicompost per acre 15 days before sowing.",
-        "safety_precautions": "Avoid broadcasting urea into standing deep water. Drain excess water before top dressing and re-irrigate after 24 hours.",
-        "source": "ICAR Integrated Soil Fertility Management Manual",
-    }
+    return AgronomyService.calculate_fertilizer_plan(
+        crop=data.get("crop") or data.get("target_crop") or "Rice",
+        growth_stage=data.get("growth_stage") or data.get("growthStage") or "Basal / Sowing",
+        soil_type=data.get("soil_type") or data.get("soilType") or "Clay loam",
+        soil_ph=float(data.get("soil_ph") or data.get("soilPh") or 6.8),
+        soil_test_npk=data.get("soil_test_npk") or data.get("soilTestNPK"),
+        cultivation_area=float(data.get("cultivation_area") or data.get("land_area") or data.get("area") or 1.0),
+        area_unit=data.get("area_unit") or data.get("areaUnit") or "acre",
+        farm_location=data.get("farm_location") or data.get("location") or "Telangana",
+        variety=data.get("variety") or data.get("crop_variety"),
+        irrigation_method=data.get("irrigation_method") or data.get("irrigationMethod") or "Surface / Furrow",
+        previous_fertilizer=data.get("previous_fertilizer"),
+        language=data.get("language") or "English",
+    )
 
 
 @router.post("/irrigation-advice", summary="Calculate smart irrigation schedule")
+@router.post("/irrigation/schedule", summary="Calculate smart irrigation schedule (alias)")
 async def get_irrigation_advice(data: dict):
     """
-    Computes precise water application intervals and critical moisture stages.
+    Computes precise water application intervals, daily/weekly quantities,
+    critical moisture stages, and water conservation tips adjusted for crop, stage, and soil.
     """
-    crop = data.get("crop", "Rice")
-    method = data.get("irrigation_method", "Drip Irrigation")
-
-    return {
-        "crop": crop,
-        "method": method,
-        "daily_water_need": "5.5 mm/day (approx. 22,000 liters/acre/day)",
-        "recommended_interval": "Every 2–3 days for Drip; Every 5–7 days for Furrow",
-        "critical_moisture_stages": [
-            {"stage": "Crown Root Initiation / Early Tillering", "importance": "Critical — moisture stress reduces tiller number by 30%"},
-            {"stage": "Panicle Initiation & Flowering", "importance": "Most Critical — drought during flowering causes spikelet sterility"},
-            {"stage": "Grain Milking & Dough Stage", "importance": "High — maintains seed weight and prevents chalkiness"},
-        ],
-        "water_saving_tips": [
-            "Use Alternate Wetting and Drying (AWD) with a field water tube to save up to 30% water without yield reduction.",
-            "Operate drip systems during early morning or evening to minimize evaporative losses.",
-            "Apply 5 cm organic mulch or paddy straw between rows to suppress soil evaporation.",
-        ],
-        "source": "Central Research Institute for Dryland Agriculture (CRIDA)",
-    }
+    return AgronomyService.calculate_irrigation_schedule(
+        crop=data.get("crop") or "Rice",
+        growth_stage=data.get("growth_stage") or data.get("growthStage") or "Vegetative Stage",
+        soil_type=data.get("soil_type") or data.get("soilType") or "Loamy",
+        soil_moisture=data.get("soil_moisture") or data.get("soilMoisture") or "Normal",
+        farm_location=data.get("farm_location") or data.get("location") or "Telangana",
+        cultivation_area=float(data.get("cultivation_area") or data.get("land_area") or data.get("area") or 1.0),
+        irrigation_method=data.get("irrigation_method") or data.get("irrigationMethod") or "Drip Irrigation",
+        weather_condition=data.get("weather_condition") or data.get("weatherCondition") or "Partly Cloudy",
+        rainfall_info=data.get("rainfall_info") or data.get("rainfall") or "0 mm (Normal dry spell)",
+        language=data.get("language") or "English",
+    )
 
 
 @router.post("/pest-control", summary="Diagnose agricultural pests and diseases")
-async def diagnose_pest_disease(data: dict):
+@router.post("/pest/diagnose", summary="Diagnose agricultural pests and diseases (alias)")
+async def diagnose_pest_disease(
+    data: dict,
+    db: AsyncSession = Depends(get_db),
+):
     """
-    Returns verified Integrated Pest Management (IPM) solutions and safe chemical controls.
+    Dynamically diagnoses crop symptoms across plant parts using RAG retrieval
+    and verified Integrated Pest Management (IPM) protocols.
     """
-    crop = data.get("crop", "Rice")
-    symptoms = (data.get("symptoms") or "Yellowing leaves with holes").lower()
-
-    if "stem" in symptoms or "borer" in symptoms or "dead" in symptoms:
-        pest_name = "Yellow Stem Borer (Scirpophaga incertulas)"
-        symptoms_desc = "Dead hearts in vegetative stage and white ears at flowering stage with exit holes on stem."
-        remedy_bio = "Install pheromone traps @ 5/acre. Conserve natural predators like spiders and Trichogramma egg parasitoids."
-        remedy_chem = "Apply Chlorantraniliprole 18.5% SC @ 0.3 ml/L or Cartap Hydrochloride 50% SP @ 2 g/L of water."
-    elif "blast" in symptoms or "spot" in symptoms or "spindle" in symptoms:
-        pest_name = "Rice Blast (Pyricularia oryzae)"
-        symptoms_desc = "Spindle-shaped lesions on leaves with brown margins and greyish center. Neck rot causing empty panicles."
-        remedy_bio = "Seed treatment with Pseudomonas fluorescens @ 10 g/kg seed. Avoid excess nitrogen fertilization."
-        remedy_chem = "Spray Tricyclazole 75% WP @ 0.6 g/L or Azoxystrobin 18.2% + Difenoconazole 11.4% SC @ 1 ml/L."
-    else:
-        pest_name = "Rice Leaf Folder (Cnaphalocrocis medinalis)"
-        symptoms_desc = "Leaves folded longitudinally with green chlorophyll scraped off, showing transparent white streaks."
-        remedy_bio = "Release Trichogramma chilonis @ 20,000/acre. Spray NSKE 5% (Neem Seed Kernel Extract) at initial incidence."
-        remedy_chem = "Spray Flubendiamide 39.35% SC @ 0.2 ml/L or Chlorpyriphos 20% EC @ 2 ml/L."
-
-    return {
-        "crop": crop,
-        "identified_pest_or_disease": pest_name,
-        "severity": "Moderate to High",
-        "symptoms": symptoms_desc,
-        "integrated_pest_management": [
-            "Monitor crop twice a week; initiate control when Economic Threshold Level (ETL) is reached.",
-            remedy_bio,
-            "Ensure balanced fertilization — avoid excessive urea which predisposes crops to pest buildup.",
-        ],
-        "recommended_treatment": remedy_chem,
-        "safety_instructions": "Wear protective gloves and mask when spraying. Do not spray during peak honeybee foraging hours (9 AM - 12 PM).",
-        "source": "ICAR-National Research Centre for Integrated Pest Management (NCIPM)",
-    }
+    return await AgronomyService.diagnose_pest_disease(
+        crop=data.get("crop") or "Rice",
+        affected_part=data.get("affected_part") or data.get("affectedPart") or "Leaves",
+        symptoms=data.get("symptoms") or data.get("observed_symptoms") or "",
+        variety=data.get("variety") or data.get("crop_variety"),
+        growth_stage=data.get("growth_stage") or data.get("growthStage"),
+        location=data.get("location") or data.get("farm_location"),
+        language=data.get("language") or "English",
+        db=db,
+    )
 
 
 @router.post("/summarize", summary="Summarize agricultural document or article")
