@@ -145,26 +145,310 @@ VERIFIED_SEED_DOCUMENTS = [
             },
         ],
     },
+    {
+        "document_name": "Cotton_Production_Technology.pdf",
+        "file_type": "application/pdf",
+        "file_size": 2850000,
+        "is_public": True,
+        "chunks": [
+            {
+                "page_number": 8,
+                "text": (
+                    "Bt Cotton Spacing and High-Density Planting System (HDPS): "
+                    "For deep black soils, optimal spacing is 90 x 45 cm (24,691 plants/ha). "
+                    "Apply recommended NPK 120:60:60 kg/ha. Apply 25% Nitrogen at sowing, 50% at square formation (45 DAS), "
+                    "and 25% at flowering. Spray 2% Potassium Nitrate (13:0:45) at boll development to prevent leaf reddening."
+                ),
+            },
+            {
+                "page_number": 21,
+                "text": (
+                    "Pink Bollworm (Pectinophora gossypiella) IPM in Cotton: "
+                    "Install gossyplure pheromone traps @ 5/acre for monitoring and 15-20/acre for mass trapping. "
+                    "Release egg parasitoid Trichogramma bactrae @ 60,000/acre at weekly intervals. "
+                    "If rosette flowers exceed 5-10% or green boll damage exceeds 10%, spray Profenofos 50% EC @ 2 ml/L or Chlorpyriphos 20% EC @ 2.5 ml/L."
+                ),
+            },
+        ],
+    },
+    {
+        "document_name": "Maize_Crop_Production_Guide.pdf",
+        "file_type": "application/pdf",
+        "file_size": 2150000,
+        "is_public": True,
+        "chunks": [
+            {
+                "page_number": 12,
+                "text": (
+                    "Maize High-Yield Agronomy & Fertilizer Schedule: "
+                    "Optimum seed rate is 20 kg/ha for hybrids with spacing of 60 x 20 cm. "
+                    "Apply 120-150 kg N, 60 kg P2O5, and 40 kg K2O per hectare. Apply full P, full K, and 1/3rd N as basal dose. "
+                    "Top dress remaining Nitrogen in two equal splits: 1/3rd at knee-high stage (V6, 30-35 DAS) and 1/3rd at tasseling."
+                ),
+            },
+            {
+                "page_number": 18,
+                "text": (
+                    "Fall Armyworm (Spodoptera frugiperda) Management in Maize: "
+                    "Scout for pinhole whorl damage. Apply push-pull strategy with Desmodium and Napier grass border. "
+                    "Early stage bio-control: Spray Bacillus thuringiensis (Bt) @ 2 g/L or Metarhizium rileyi @ 3 g/L. "
+                    "Severe infestation (ETL > 10% damaged whorls): Direct spray into whorls with Chlorantraniliprole 18.5% SC @ 0.4 ml/L or Emamectin Benzoate 5% SG @ 0.4 g/L."
+                ),
+            },
+        ],
+    },
+    {
+        "document_name": "Chilli_Crop_Management.pdf",
+        "file_type": "application/pdf",
+        "file_size": 2600000,
+        "is_public": True,
+        "chunks": [
+            {
+                "page_number": 14,
+                "text": (
+                    "Chilli Sucking Pest Complex (Thrips vs Mites Differentiation): "
+                    "Thrips (Scirtothrips dorsalis) cause leaves to curl upwards with silvery boat-shaped underside. "
+                    "Yellow mites (Polyphagotarsonemus latus) cause downward curling ('inverted cup') with elongated petiole. "
+                    "For thrips: Spray Fipronil 5% SC @ 2 ml/L or Spinosad 45% SC @ 0.3 ml/L. "
+                    "For mites: Spray Spiromesifen 22.9% SC @ 1 ml/L or Diafenthiuron 50% WP @ 1.25 g/L."
+                ),
+            },
+            {
+                "page_number": 26,
+                "text": (
+                    "Anthracnose / Die-back and Fruit Rot (Colletotrichum capsici) in Chilli: "
+                    "Symptoms include necrosis of tender twigs starting from top downwards and circular sunken spots on ripe fruits. "
+                    "Spray Azoxystrobin 23% SC @ 1 ml/L or Difenoconazole 25% EC @ 0.5 ml/L or Copper Oxychloride @ 3 g/L at 12-day intervals."
+                ),
+            },
+        ],
+    },
+    {
+        "document_name": "Groundnut_Package_of_Practices.pdf",
+        "file_type": "application/pdf",
+        "file_size": 1900000,
+        "is_public": True,
+        "chunks": [
+            {
+                "page_number": 9,
+                "text": (
+                    "Groundnut Calcium Nutrition & Gypsum Application: "
+                    "Groundnut pods absorb calcium directly from the pegging zone soil, not through root xylem. "
+                    "Apply Gypsum @ 400-500 kg/ha at peak flowering (40-45 DAS) close to the base of plants and lightly incorporate into soil. "
+                    "This prevents 'pops' (empty shells) and increases oil content and kernel weight."
+                ),
+            },
+            {
+                "page_number": 16,
+                "text": (
+                    "Tikka Leaf Spot (Cercospora arachidicola) Control: "
+                    "Dark brown to black circular spots surrounded by a chlorotic yellow halo appear on leaves. "
+                    "Spray Tebuconazole 25.9% EC @ 1.25 ml/L or Hexaconazole 5% EC @ 2 ml/L at first appearance of disease."
+                ),
+            },
+        ],
+    },
+    {
+        "document_name": "Redgram_Pigeonpea_Manual.pdf",
+        "file_type": "application/pdf",
+        "file_size": 2100000,
+        "is_public": True,
+        "chunks": [
+            {
+                "page_number": 6,
+                "text": (
+                    "Pigeonpea (Arhar / Redgram) Agronomy & Seed Treatment: "
+                    "Inoculate seeds with Rhizobium culture and Trichoderma viride @ 5 g/kg seed before sowing. "
+                    "Spacing: 150-180 x 20 cm for medium-duration varieties like Asha (ICPL 87119). "
+                    "Apply 20 kg N, 50 kg P2O5, and 20 kg Sulphur per hectare as basal placement."
+                ),
+            },
+            {
+                "page_number": 18,
+                "text": (
+                    "Helicoverpa Pod Borer Management in Pigeonpea: "
+                    "Monitor moths with pheromone traps @ 5/acre. Shake plants over plastic sheets to dislodge early instars. "
+                    "Spray HaNPV (250 LE/ha) or Neem oil 1500 ppm @ 3 ml/L at 50% flowering. "
+                    "For late instars, spray Chlorantraniliprole 18.5% SC @ 0.3 ml/L or Flubendiamide 480 SC @ 0.2 ml/L."
+                ),
+            },
+        ],
+    },
+    {
+        "document_name": "Wheat_Cultivation_Practices.pdf",
+        "file_type": "application/pdf",
+        "file_size": 2400000,
+        "is_public": True,
+        "chunks": [
+            {
+                "page_number": 10,
+                "text": (
+                    "Wheat Sowing Time & Critical Irrigation Stages: "
+                    "Optimum sowing window: Nov 1 to Nov 20. Crown Root Initiation (CRI) stage (20-25 DAS) is the most critical irrigation stage; "
+                    "delaying CRI irrigation by 10 days can cause irreversible yield reduction of up to 10 quintals/ha. "
+                    "Subsequent critical stages: Tillering (40-45 DAS), Jointing (60-65 DAS), Flowering (80-85 DAS), and Milk stage (100-105 DAS)."
+                ),
+            },
+            {
+                "page_number": 22,
+                "text": (
+                    "Stripe Rust (Yellow Rust) Management in Wheat: "
+                    "Yellow pustules arranged in linear stripes appear on leaves. "
+                    "Spray Propiconazole 25% EC (Tilt) @ 1 ml/L (200 ml in 200L water/acre) immediately upon first sighting in cooler sub-mountainous zones."
+                ),
+            },
+        ],
+    },
+    {
+        "document_name": "Soybean_Production_Guide.pdf",
+        "file_type": "application/pdf",
+        "file_size": 2050000,
+        "is_public": True,
+        "chunks": [
+            {
+                "page_number": 7,
+                "text": (
+                    "Soybean Broad Bed Furrow (BBF) System & Weed Management: "
+                    "Plant on broad beds of 120 cm width with 30 cm furrows to facilitate drainage in heavy Vertisols during waterlogging. "
+                    "Apply pre-emergence herbicide Pendimethalin 30% EC @ 1.0 kg a.i./ha within 48 hours of sowing, or post-emergence Imazethapyr 10% SL @ 100 g a.i./ha at 15-20 DAS."
+                ),
+            },
+            {
+                "page_number": 15,
+                "text": (
+                    "Girdle Beetle (Obereopsis brevis) in Soybean: "
+                    "Adult females make two parallel ring cuts around the petiole or stem and lay eggs. "
+                    "Apply Thiamethoxam 12.6% + Lambda Cyhalothrin 9.5% ZC @ 0.25 ml/L of water at early vegetative stage."
+                ),
+            },
+        ],
+    },
+    {
+        "document_name": "Sugarcane_Cultivation_Standard.pdf",
+        "file_type": "application/pdf",
+        "file_size": 3100000,
+        "is_public": True,
+        "chunks": [
+            {
+                "page_number": 12,
+                "text": (
+                    "Sugarcane Sett Treatment & Planting: "
+                    "Dip 2-bud setts in Carbendazim 50% WP (1 g/L) + Chlorpyriphos 20% EC (2 ml/L) solution for 15 minutes before furrow planting. "
+                    "Recommended spacing is 120 cm or 150 cm single row or 30-150-30 cm dual row under drip fertigation. "
+                    "Apply 250:100:120 kg NPK/ha; complete all Nitrogen by 90-120 days after planting (prior to grand growth phase)."
+                ),
+            },
+            {
+                "page_number": 28,
+                "text": (
+                    "Early Shoot Borer (Chilo infuscatellus) in Sugarcane: "
+                    "Dead hearts appear in shoots up to 100 days old. "
+                    "Apply Chlorantraniliprole 0.4% G @ 7.5 kg/acre in furrows at planting, or spray Chlorantraniliprole 18.5% SC @ 0.3 ml/L at 30 and 45 days after planting."
+                ),
+            },
+        ],
+    },
+    {
+        "document_name": "Horticulture_Mango_Orchard_Care.pdf",
+        "file_type": "application/pdf",
+        "file_size": 2750000,
+        "is_public": True,
+        "chunks": [
+            {
+                "page_number": 15,
+                "text": (
+                    "Mango Hopper (Idioscopus clypealis) & Powdery Mildew Management: "
+                    "Nymphs suck sap from tender panicles causing blossom blight and fruit drop. "
+                    "First spray at flower bud emergence: Imidacloprid 17.8% SL @ 0.3 ml/L + Wettable Sulphur @ 2 g/L. "
+                    "Second spray at fruit set (pea size): Hexaconazole 5% EC @ 1 ml/L + Thiamethoxam 25% WG @ 0.2 g/L."
+                ),
+            },
+        ],
+    },
+    {
+        "document_name": "Organic_Farming_Biofertilizers.pdf",
+        "file_type": "application/pdf",
+        "file_size": 1700000,
+        "is_public": True,
+        "chunks": [
+            {
+                "page_number": 5,
+                "text": (
+                    "Jeevamrutha Preparation & Application Protocol: "
+                    "Mix 10 kg fresh desi cow dung, 5-10 L cow urine, 2 kg jaggery, 2 kg pulse flour, and a handful of virgin forest/bund soil in 200 L water. "
+                    "Ferment for 48-72 hours under shade, stirring clockwise twice daily. "
+                    "Apply 200 L per acre via irrigation water or spray 10% filtered extract on crop canopy every 15-20 days to multiply beneficial soil microbiota."
+                ),
+            },
+        ],
+    },
+    {
+        "document_name": "Post_Harvest_Storage_Management.pdf",
+        "file_type": "application/pdf",
+        "file_size": 1950000,
+        "is_public": True,
+        "chunks": [
+            {
+                "page_number": 8,
+                "text": (
+                    "Grain Safe Storage Moisture Limits & Hermetic Technology: "
+                    "Sun-dry food grains to below 12% moisture (below 8% for oilseeds) prior to bag storage to prevent fungal aflatoxin contamination and insect infestation. "
+                    "Use hermetic storage bags (PICS / SuperGrain bags) which naturally create high-CO2, oxygen-depleted atmospheres that suffocate stored grain weevils without chemical fumigants."
+                ),
+            },
+        ],
+    },
+    {
+        "document_name": "Weed_Management_Guide.pdf",
+        "file_type": "application/pdf",
+        "file_size": 2200000,
+        "is_public": True,
+        "chunks": [
+            {
+                "page_number": 11,
+                "text": (
+                    "Integrated Weed Management & Herbicide Resistance Mitigation: "
+                    "Rotate chemical modes of action (ALS inhibitors, ACCase inhibitors, and synthetic auxins) to prevent herbicide-resistant Phalaris minor and Echinochloa colona. "
+                    "For transplanted rice: apply Pretilachlor 50% EC + safener @ 500 g a.i./ha within 3 days of transplanting into 2-3 cm standing water."
+                ),
+            },
+        ],
+    },
+    {
+        "document_name": "Precision_Farming_IoT_Sensors.pdf",
+        "file_type": "application/pdf",
+        "file_size": 1650000,
+        "is_public": True,
+        "chunks": [
+            {
+                "page_number": 4,
+                "text": (
+                    "IoT Soil Moisture Sensors & Smart Drip Automation: "
+                    "Install capacitive FMC soil moisture probes at two root depths: 15 cm (active feeding zone) and 45 cm (deep reserve). "
+                    "Trigger automated solenoid valve irrigation when tension reaches 30-40 kPa in sandy loam soils, conserving up to 35% electricity and water."
+                ),
+            },
+        ],
+    },
 ]
 
 
 async def seed_verified_agricultural_documents(session: AsyncSession) -> int:
     """
     Seeds verified agricultural guidance documents and precomputed vector embeddings
-    if the database document table has no records.
+    for any documents not yet in the database.
     """
     try:
-        count_res = await session.execute(select(func.count(Document.id)))
-        existing_count = count_res.scalar() or 0
-
-        if existing_count > 0:
-            logger.info(f"Database already contains {existing_count} documents. Skipping initial seed.")
-            return 0
-
-        logger.info("Database empty. Seeding verified ICAR agricultural manuals & vector embeddings...")
         total_seeded = 0
 
         for doc_data in VERIFIED_SEED_DOCUMENTS:
+            existing_doc = (await session.execute(
+                select(Document).where(Document.document_name == doc_data["document_name"])
+            )).scalars().first()
+
+            if existing_doc:
+                continue
+
             doc = Document(
                 document_name=doc_data["document_name"],
                 file_path=f"system_docs/{doc_data['document_name']}",
@@ -214,8 +498,9 @@ async def seed_verified_agricultural_documents(session: AsyncSession) -> int:
             vector_store.upsert_chunks(vector_items)
             total_seeded += 1
 
-        await session.commit()
-        logger.info(f"Successfully seeded {total_seeded} verified agricultural documents into DB and vector store.")
+        if total_seeded > 0:
+            await session.commit()
+            logger.info(f"Successfully seeded {total_seeded} verified agricultural documents into DB and vector store.")
         return total_seeded
 
     except Exception as e:

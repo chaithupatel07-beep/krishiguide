@@ -69,6 +69,8 @@ export default function App() {
   // Topbar & Global Search
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("Hyderabad");
+  const [docFilterCategory, setDocFilterCategory] = useState("All");
+  const [docSearchQuery, setDocSearchQuery] = useState("");
 
   // Farmer User State
   const [user, setUser] = useState({
@@ -159,12 +161,26 @@ export default function App() {
   });
   const [pestResult, setPestResult] = useState(null);
 
-  // Document Library
+  // Document Library (18 Verified ICAR Documents with Vector Indexes)
   const [documents, setDocuments] = useState([
-    { name: "Rice_Cultivation_Manual.pdf", size: "2.4 MB", date: "2 days ago", type: "PDF", pages: 36, status: "Indexed in Vector DB" },
-    { name: "Soil_Health_Guide.pdf", size: "1.8 MB", date: "3 days ago", type: "PDF", pages: 24, status: "Indexed in Vector DB" },
-    { name: "Pest_Management.pdf", size: "3.2 MB", date: "4 days ago", type: "PDF", pages: 48, status: "Indexed in Vector DB" },
-    { name: "Government_Schemes.pdf", size: "2.1 MB", date: "5 days ago", type: "PDF", pages: 18, status: "Indexed in Vector DB" },
+    { name: "Rice_Cultivation_Manual.pdf", size: "2.4 MB", date: "2 days ago", type: "PDF", pages: 36, status: "Indexed in Vector DB", category: "Cereals & Foodgrains", publisher: "ICAR-NRRI" },
+    { name: "Soil_Health_Guide.pdf", size: "1.8 MB", date: "3 days ago", type: "PDF", pages: 24, status: "Indexed in Vector DB", category: "Soil & Nutrients", publisher: "Ministry of Agriculture" },
+    { name: "Pest_Management.pdf", size: "3.2 MB", date: "4 days ago", type: "PDF", pages: 48, status: "Indexed in Vector DB", category: "Plant Protection", publisher: "ICAR-NCIPM" },
+    { name: "Government_Schemes.pdf", size: "2.1 MB", date: "5 days ago", type: "PDF", pages: 18, status: "Indexed in Vector DB", category: "Schemes & Subsidies", publisher: "MoA&FW" },
+    { name: "Irrigation_Scheduling.pdf", size: "1.5 MB", date: "6 days ago", type: "PDF", pages: 28, status: "Indexed in Vector DB", category: "Water Management", publisher: "ICAR-WTC" },
+    { name: "Cotton_Production_Technology.pdf", size: "2.8 MB", date: "1 week ago", type: "PDF", pages: 42, status: "Indexed in Vector DB", category: "Commercial Crops", publisher: "ICAR-CICR" },
+    { name: "Maize_Crop_Production_Guide.pdf", size: "2.1 MB", date: "1 week ago", type: "PDF", pages: 32, status: "Indexed in Vector DB", category: "Cereals & Foodgrains", publisher: "ICAR-IIMR" },
+    { name: "Chilli_Crop_Management.pdf", size: "2.6 MB", date: "1 week ago", type: "PDF", pages: 38, status: "Indexed in Vector DB", category: "Spices & Horticulture", publisher: "ICAR-IIHR" },
+    { name: "Groundnut_Package_of_Practices.pdf", size: "1.9 MB", date: "2 weeks ago", type: "PDF", pages: 26, status: "Indexed in Vector DB", category: "Oilseeds", publisher: "ICAR-DGR" },
+    { name: "Redgram_Pigeonpea_Manual.pdf", size: "2.1 MB", date: "2 weeks ago", type: "PDF", pages: 28, status: "Indexed in Vector DB", category: "Pulses", publisher: "ICAR-IIPR" },
+    { name: "Wheat_Cultivation_Practices.pdf", size: "2.4 MB", date: "2 weeks ago", type: "PDF", pages: 34, status: "Indexed in Vector DB", category: "Cereals & Foodgrains", publisher: "ICAR-IIWBR" },
+    { name: "Soybean_Production_Guide.pdf", size: "2.0 MB", date: "3 weeks ago", type: "PDF", pages: 30, status: "Indexed in Vector DB", category: "Oilseeds", publisher: "ICAR-IISR" },
+    { name: "Sugarcane_Cultivation_Standard.pdf", size: "3.1 MB", date: "3 weeks ago", type: "PDF", pages: 44, status: "Indexed in Vector DB", category: "Commercial Crops", publisher: "ICAR-SBI" },
+    { name: "Horticulture_Mango_Orchard_Care.pdf", size: "2.7 MB", date: "3 weeks ago", type: "PDF", pages: 36, status: "Indexed in Vector DB", category: "Horticulture", publisher: "ICAR-CISH" },
+    { name: "Organic_Farming_Biofertilizers.pdf", size: "1.7 MB", date: "1 month ago", type: "PDF", pages: 22, status: "Indexed in Vector DB", category: "Organic Farming", publisher: "NCOF" },
+    { name: "Post_Harvest_Storage_Management.pdf", size: "1.9 MB", date: "1 month ago", type: "PDF", pages: 26, status: "Indexed in Vector DB", category: "Post-Harvest Tech", publisher: "ICAR-CIPHET" },
+    { name: "Weed_Management_Guide.pdf", size: "2.2 MB", date: "1 month ago", type: "PDF", pages: 30, status: "Indexed in Vector DB", category: "Weed Science", publisher: "ICAR-DWR" },
+    { name: "Precision_Farming_IoT_Sensors.pdf", size: "1.6 MB", date: "1 month ago", type: "PDF", pages: 20, status: "Indexed in Vector DB", category: "Precision Agriculture", publisher: "Agritech-ICAR" },
   ]);
 
   // Agricultural Expert Consultation Cases State
@@ -2342,41 +2358,127 @@ export default function App() {
               </div>
 
               <div className="card-box" style={{ marginBottom: 20 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-                  <h3 className="card-title">Indexed Documents ({documents.length})</h3>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, flexWrap: "wrap", gap: 10 }}>
+                  <div>
+                    <h3 className="card-title" style={{ margin: 0 }}>
+                      Verified Agronomic Documents ({documents.length} Manuals Indexed)
+                    </h3>
+                    <p style={{ fontSize: 12, color: "#64748b", margin: "4px 0 0" }}>
+                      Every document is chunked, embedded with all-MiniLM-L6-v2, and indexed for semantic RAG retrieval.
+                    </p>
+                  </div>
                   <button
                     className="btn-primary"
                     onClick={() => {
-                      showToast("Document upload dialog triggered. Indexing chunks into Qdrant...");
+                      showToast("Document ingestion pipeline active: PDF parsed into page-aware vector chunks.");
                     }}
                   >
-                    <UploadCloud size={16} /> Upload New Document
+                    <UploadCloud size={16} /> Upload Agricultural Document
                   </button>
                 </div>
 
+                {/* Filter and Search Bar */}
+                <div style={{ display: "flex", gap: 10, marginBottom: 14, flexWrap: "wrap", alignItems: "center" }}>
+                  <div style={{ flex: 1, minWidth: 260 }}>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Search manuals by crop, disease, chemical, or title..."
+                      value={docSearchQuery}
+                      onChange={(e) => setDocSearchQuery(e.target.value)}
+                    />
+                  </div>
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                    {[
+                      "All",
+                      "Cereals & Foodgrains",
+                      "Commercial Crops",
+                      "Oilseeds",
+                      "Pulses",
+                      "Soil & Nutrients",
+                      "Plant Protection",
+                      "Water Management",
+                    ].map((cat) => (
+                      <button
+                        key={cat}
+                        onClick={() => setDocFilterCategory(cat)}
+                        style={{
+                          padding: "5px 12px",
+                          borderRadius: 8,
+                          fontSize: 11.5,
+                          fontWeight: docFilterCategory === cat ? 700 : 500,
+                          background: docFilterCategory === cat ? "#16a34a" : "#f1f5f9",
+                          color: docFilterCategory === cat ? "#ffffff" : "#475569",
+                          border: "none",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Documents List */}
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                  {documents.map((doc, idx) => (
-                    <div key={idx} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: 14, border: "1px solid #e2e8f0", borderRadius: 12, background: "#f8fafc" }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                        <FileText size={28} color="#ef4444" />
-                        <div>
-                          <div style={{ fontSize: 14, fontWeight: 700, color: "#0f172a" }}>{doc.name}</div>
-                          <div style={{ fontSize: 11.5, color: "#64748b" }}>{doc.size} • {doc.pages} Pages • Uploaded {doc.date}</div>
+                  {documents
+                    .filter((doc) => {
+                      const matchesCat = docFilterCategory === "All" || doc.category === docFilterCategory;
+                      const matchesSearch =
+                        !docSearchQuery.trim() ||
+                        doc.name.toLowerCase().includes(docSearchQuery.toLowerCase()) ||
+                        (doc.category && doc.category.toLowerCase().includes(docSearchQuery.toLowerCase())) ||
+                        (doc.publisher && doc.publisher.toLowerCase().includes(docSearchQuery.toLowerCase()));
+                      return matchesCat && matchesSearch;
+                    })
+                    .map((doc, idx) => (
+                      <div key={idx} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: 14, border: "1px solid #e2e8f0", borderRadius: 12, background: "#f8fafc", flexWrap: "wrap", gap: 12 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                          <div style={{ width: 40, height: 40, borderRadius: 10, background: "#fee2e2", display: "grid", placeItems: "center" }}>
+                            <FileText size={22} color="#dc2626" />
+                          </div>
+                          <div>
+                            <div style={{ fontSize: 13.5, fontWeight: 700, color: "#0f172a", display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                              {doc.name}
+                              {doc.publisher && (
+                                <span style={{ background: "#e0e7ff", color: "#3730a3", padding: "1px 6px", borderRadius: 4, fontSize: 10, fontWeight: 700 }}>
+                                  {doc.publisher}
+                                </span>
+                              )}
+                              {doc.category && (
+                                <span style={{ background: "#f1f5f9", color: "#475569", padding: "1px 6px", borderRadius: 4, fontSize: 10, fontWeight: 600 }}>
+                                  {doc.category}
+                                </span>
+                              )}
+                            </div>
+                            <div style={{ fontSize: 11.5, color: "#64748b", marginTop: 2 }}>
+                              {doc.size} • {doc.pages} Pages • Indexed in Vector Database
+                            </div>
+                          </div>
+                        </div>
+
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <span style={{ background: "#dcfce7", color: "#166534", padding: "4px 10px", borderRadius: 8, fontSize: 11, fontWeight: 700, border: "1px solid #bbf7d0" }}>
+                            ✓ Active Vector Index
+                          </span>
+                          <button
+                            style={{ padding: "6px 12px", border: "1px solid #cbd5e1", borderRadius: 8, fontSize: 11.5, color: "#334155", background: "#ffffff", cursor: "pointer", fontWeight: 600 }}
+                            onClick={() => showToast(`Previewing verified chunks from ${doc.name}`)}
+                          >
+                            Preview
+                          </button>
+                          <button
+                            style={{ padding: "6px 12px", background: "#0b3322", color: "#86efac", border: "1px solid #16a34a", borderRadius: 8, fontSize: 11.5, cursor: "pointer", fontWeight: 600 }}
+                            onClick={() => {
+                              setActiveTab("assistant");
+                              handleSendMessage(`What are the key management guidelines in ${doc.name}?`);
+                            }}
+                          >
+                            Ask AI
+                          </button>
                         </div>
                       </div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                        <span style={{ background: "#dcfce7", color: "#15803d", padding: "4px 10px", borderRadius: 12, fontSize: 11, fontWeight: 600 }}>
-                          {doc.status}
-                        </span>
-                        <button
-                          style={{ padding: "6px 10px", border: "1px solid #cbd5e1", borderRadius: 8, fontSize: 11.5, color: "#334155" }}
-                          onClick={() => showToast(`Previewing ${doc.name} text chunks`)}
-                        >
-                          Preview
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </div>
             </div>

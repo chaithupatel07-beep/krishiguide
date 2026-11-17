@@ -30,7 +30,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 import asyncio
-from sqlalchemy import select
 from app.database.connection import engine, AsyncSessionLocal
 from app.database.base import Base
 import app.models  # noqa
@@ -278,7 +277,7 @@ async def run_demo():
         # -------------------------------------------------------------
         print("\n[STEP 18] Agricultural Expert Reviews Case & Submits Verified Guidance")
         expert_user = (await session.execute(
-            select(User).where(User.email == "expert@smartfarming.org")
+            app.models.user.select(User).where(User.email == "expert@smartfarming.org")
         )).scalars().first()
 
         # Expert claims case
@@ -332,3 +331,4 @@ async def run_demo():
 
 if __name__ == "__main__":
     asyncio.run(run_demo())
+
